@@ -7,25 +7,26 @@ import { WHATSAPP_URL } from "@/lib/utils";
 import type { MenuCategory } from "@/data/products";
 
 export const metadata: Metadata = {
-  title: "Menu — Luxury Desserts & Platters",
+  title: "Menu — Vegetarian Starters, Mains & Desserts",
   description:
-    "Explore Plate Date's premium menu: dessert pizza, brownie boxes, tres leches, party platters & gift hampers. Vegetarian dessert delivery in Kolkata.",
+    "Explore Plate Date's 100% vegetarian menu: starters, pastas, risotto, Mexican bowls, brownies, cookies and fudge in Kolkata.",
   keywords: [
-    "Dessert Menu Kolkata",
+    "Vegetarian Menu Kolkata",
+    "Cloud Kitchen Kolkata",
     "Brownie Boxes Kolkata",
-    "Party Platters Kolkata",
+    "Vegetarian Mains Kolkata",
     "Vegetarian Desserts Kolkata",
   ],
 };
 
 const validCategories: MenuCategory[] = [
   "all",
+  "starters",
+  "mains",
   "desserts",
   "brownies",
-  "tres-leches",
-  "platters",
-  "gift-boxes",
-  "specials",
+  "cookies",
+  "fudge",
 ];
 
 export default async function MenuPage({
@@ -61,7 +62,8 @@ export default async function MenuPage({
             <span className="luxury-gradient-text italic">Craving</span>
           </h1>
           <p className="mt-6 max-w-xl text-brand-text/60 text-lg">
-            Filter by category. Tap any creation to order instantly on WhatsApp.
+            A cute, curated vegetarian menu. Pick a category first, then explore
+            the dishes inside.
           </p>
           <div className="mt-8">
             <MagneticButton asChild>
@@ -78,6 +80,7 @@ export default async function MenuPage({
           <MenuGrid initialCategory={initialCategory} />
         </div>
       </section>
+
     </PageTransition>
   );
 }

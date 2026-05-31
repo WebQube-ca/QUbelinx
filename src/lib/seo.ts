@@ -4,7 +4,7 @@ export const siteConfig = {
   name: "Plate Date by Rhea Jaitha",
   shortName: "Plate Date",
   description:
-    "Premium vegetarian cloud kitchen in Kolkata. Handcrafted brownie boxes, dessert pizza, tres leches, cookie bouquets, party platters & custom food gifting.",
+    "Premium vegetarian cloud kitchen in Kolkata. Handcrafted brownies, cookies, fudge, vegetarian starters, mains and custom food gifting.",
   url: "https://platedate.in",
   keywords: [
     "Cloud Kitchen Kolkata",
@@ -12,20 +12,19 @@ export const siteConfig = {
     "Brownie Boxes Kolkata",
     "Vegetarian Desserts Kolkata",
     "Custom Food Gifts Kolkata",
+    "Vegetarian Food Kolkata",
     "Party Platters Kolkata",
     "Plate Date",
     "Rhea Jaitha",
-    "Dessert Pizza Kolkata",
-    "Tres Leches Kolkata",
   ],
-  ogImage: "/og-image.svg",
+  ogImage: "/plate-date-logo.png",
   locale: "en_IN",
 };
 
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} | Luxury Desserts & Gifting Kolkata`,
+    default: `${siteConfig.name} | Luxury Vegetarian Food & Desserts Kolkata`,
     template: `%s | ${siteConfig.shortName}`,
   },
   description: siteConfig.description,
@@ -42,9 +41,9 @@ export const defaultMetadata: Metadata = {
     images: [
       {
         url: siteConfig.ogImage,
-        width: 1200,
-        height: 630,
-        alt: "Plate Date — Luxury Desserts Kolkata",
+        width: 1024,
+        height: 1024,
+        alt: "Plate Date by Rhea Jaitha",
       },
     ],
   },
@@ -68,6 +67,10 @@ export const defaultMetadata: Metadata = {
   alternates: {
     canonical: siteConfig.url,
   },
+  icons: {
+    icon: "/plate-date-logo.png",
+    apple: "/plate-date-logo.png",
+  },
 };
 
 export function getLocalBusinessSchema() {
@@ -78,8 +81,9 @@ export function getLocalBusinessSchema() {
     description: siteConfig.description,
     url: siteConfig.url,
     image: `${siteConfig.url}${siteConfig.ogImage}`,
-    servesCuisine: ["Vegetarian", "Desserts", "Indian Fusion"],
-    priceRange: "₹₹₹",
+    servesCuisine: ["Vegetarian", "Desserts", "Italian", "Mexican", "Asian"],
+    priceRange: "₹₹",
+    telephone: "+91 98743 45555",
     address: {
       "@type": "PostalAddress",
       addressLocality: "Ballygunge",
@@ -100,8 +104,6 @@ export function getLocalBusinessSchema() {
       ratingValue: "4.9",
       reviewCount: "200",
     },
-    sameAs: [
-      "https://instagram.com/platedate",
-    ],
+    sameAs: ["https://www.instagram.com/platedatebyrheajaitha"],
   };
 }

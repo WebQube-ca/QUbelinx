@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { MagneticButton } from "@/components/shared/magnetic-button";
+import { BrandLogo } from "@/components/shared/brand-logo";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { cn, WHATSAPP_URL } from "@/lib/utils";
 
@@ -51,9 +52,16 @@ export function Navbar() {
         >
           <Link
             href="/"
-            className="font-display text-xl md:text-2xl font-semibold text-brand-text hover:text-brand-primary transition-colors"
+            className="group inline-flex items-center gap-3"
+            aria-label="Plate Date by Rhea Jaitha home"
           >
-            Plate <span className="text-brand-primary">Date</span>
+            <BrandLogo
+              priority
+              imageClassName={cn(
+                "h-16 w-16 transition-all duration-500 md:h-20 md:w-20",
+                scrolled ? "h-12 w-12 md:h-16 md:w-16" : ""
+              )}
+            />
           </Link>
 
           <ul className="hidden lg:flex items-center gap-8">
@@ -81,15 +89,15 @@ export function Navbar() {
 
           <div className="flex lg:hidden items-center gap-2">
             <ThemeToggle />
-          <button
-            type="button"
-            className="p-2 text-brand-text"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-expanded={mobileOpen}
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-          >
-            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+            <button
+              type="button"
+              className="p-2 text-brand-text"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-expanded={mobileOpen}
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            >
+              {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
           </div>
         </nav>
       </header>

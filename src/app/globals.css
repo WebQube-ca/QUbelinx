@@ -4,41 +4,41 @@
 
 @layer base {
   :root {
-    --brand-primary: #c2185b;
-    --brand-secondary: #fce4ec;
-    --brand-accent: #ffb6c1;
-    --brand-neutral: #fff8f8;
-    --brand-text: #1a1a1a;
-    --brand-background: #ffffff;
-    --brand-dark-section: #1a1a1a;
+    --brand-primary: 124 58 237;
+    --brand-secondary: 238 242 255;
+    --brand-accent: 34 211 238;
+    --brand-neutral: 248 250 252;
+    --brand-text: 15 23 42;
+    --brand-background: 247 248 255;
+    --brand-dark-section: 8 11 22;
 
     --hero-gradient: radial-gradient(
       ellipse 80% 60% at 50% 0%,
-      rgba(252, 228, 236, 0.9) 0%,
+        rgba(124, 58, 237, 0.16) 0%,
       transparent 70%
     );
     --luxury-mesh:
       radial-gradient(
         at 40% 20%,
-        rgba(255, 182, 193, 0.4) 0px,
+        rgba(34, 211, 238, 0.22) 0px,
         transparent 50%
       ),
       radial-gradient(
         at 80% 0%,
-        rgba(252, 228, 236, 0.6) 0px,
+        rgba(124, 58, 237, 0.18) 0px,
         transparent 50%
       ),
       radial-gradient(
         at 0% 50%,
-        rgba(194, 24, 91, 0.08) 0px,
+        rgba(14, 165, 233, 0.14) 0px,
         transparent 50%
       );
     --glass-bg: rgba(255, 255, 255, 0.6);
     --glass-border: rgba(255, 255, 255, 0.4);
     --glow-shadow:
-      0 0 0 1px rgba(194, 24, 91, 0.1),
-      0 25px 50px -12px rgba(194, 24, 91, 0.2),
-      0 0 60px rgba(255, 182, 193, 0.3);
+      0 0 0 1px rgba(124, 58, 237, 0.1),
+      0 25px 50px -12px rgba(79, 70, 229, 0.2),
+      0 0 60px rgba(34, 211, 238, 0.22);
 
     --background: 0 0% 100%;
     --foreground: 0 0% 10%;
@@ -46,30 +46,30 @@
     --card-foreground: 0 0% 10%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 10%;
-    --primary: 336 74% 43%;
+    --primary: 258 90% 66%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 340 71% 95%;
-    --secondary-foreground: 336 74% 30%;
-    --muted: 340 40% 96%;
+    --secondary: 226 100% 97%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 220 33% 96%;
     --muted-foreground: 0 0% 40%;
-    --accent: 351 100% 86%;
-    --accent-foreground: 336 74% 30%;
+    --accent: 187 92% 69%;
+    --accent-foreground: 222 47% 11%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 340 30% 92%;
-    --input: 340 30% 92%;
-    --ring: 336 74% 43%;
+    --border: 220 31% 91%;
+    --input: 220 31% 91%;
+    --ring: 258 90% 66%;
     --radius: 0.75rem;
   }
 
   .dark {
-    --brand-primary: #f06292;
-    --brand-secondary: #2d1a22;
-    --brand-accent: #6d3a4f;
-    --brand-neutral: #1a1216;
-    --brand-text: #f8f4f5;
-    --brand-background: #0d0a0b;
-    --brand-dark-section: #050304;
+    --brand-primary: 240 98 146;
+    --brand-secondary: 45 26 34;
+    --brand-accent: 109 58 79;
+    --brand-neutral: 26 18 22;
+    --brand-text: 248 244 245;
+    --brand-background: 13 10 11;
+    --brand-dark-section: 5 3 4;
 
     --hero-gradient: radial-gradient(
       ellipse 80% 60% at 50% 0%,

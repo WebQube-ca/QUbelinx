@@ -12,13 +12,13 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          primary: "var(--brand-primary)",
-          secondary: "var(--brand-secondary)",
-          accent: "var(--brand-accent)",
-          neutral: "var(--brand-neutral)",
-          text: "var(--brand-text)",
-          background: "var(--brand-background)",
-          "dark-section": "var(--brand-dark-section)",
+          primary: "rgb(var(--brand-primary) / <alpha-value>)",
+          secondary: "rgb(var(--brand-secondary) / <alpha-value>)",
+          accent: "rgb(var(--brand-accent) / <alpha-value>)",
+          neutral: "rgb(var(--brand-neutral) / <alpha-value>)",
+          text: "rgb(var(--brand-text) / <alpha-value>)",
+          background: "rgb(var(--brand-background) / <alpha-value>)",
+          "dark-section": "rgb(var(--brand-dark-section) / <alpha-value>)",
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Instagram, MapPin, MessageCircle } from "lucide-react";
+import { BrandLogo } from "@/components/shared/brand-logo";
 import { INSTAGRAM_URL, LOCATION, WHATSAPP_URL, CHEF_NAME } from "@/lib/utils";
 
 export function Footer() {
@@ -10,9 +11,13 @@ export function Footer() {
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-2">
-            <p className="font-display text-3xl font-semibold mb-4">
-              Plate <span className="text-brand-accent">Date</span>
-            </p>
+            <Link
+              href="/"
+              className="mb-5 inline-flex items-center rounded-full"
+              aria-label="Plate Date by Rhea Jaitha home"
+            >
+              <BrandLogo imageClassName="h-32 w-32 md:h-40 md:w-40 ring-white/10" />
+            </Link>
             <p className="text-white/60 max-w-md leading-relaxed">
               Handcrafted vegetarian desserts & unforgettable gifting by{" "}
               {CHEF_NAME}. Kolkata&apos;s premium cloud kitchen for every
