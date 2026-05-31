@@ -1,0 +1,246 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --brand-primary: #c2185b;
+    --brand-secondary: #fce4ec;
+    --brand-accent: #ffb6c1;
+    --brand-neutral: #fff8f8;
+    --brand-text: #1a1a1a;
+    --brand-background: #ffffff;
+    --brand-dark-section: #1a1a1a;
+
+    --hero-gradient: radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      rgba(252, 228, 236, 0.9) 0%,
+      transparent 70%
+    );
+    --luxury-mesh:
+      radial-gradient(
+        at 40% 20%,
+        rgba(255, 182, 193, 0.4) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 80% 0%,
+        rgba(252, 228, 236, 0.6) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 0% 50%,
+        rgba(194, 24, 91, 0.08) 0px,
+        transparent 50%
+      );
+    --glass-bg: rgba(255, 255, 255, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --glow-shadow:
+      0 0 0 1px rgba(194, 24, 91, 0.1),
+      0 25px 50px -12px rgba(194, 24, 91, 0.2),
+      0 0 60px rgba(255, 182, 193, 0.3);
+
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 336 74% 43%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 340 71% 95%;
+    --secondary-foreground: 336 74% 30%;
+    --muted: 340 40% 96%;
+    --muted-foreground: 0 0% 40%;
+    --accent: 351 100% 86%;
+    --accent-foreground: 336 74% 30%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 340 30% 92%;
+    --input: 340 30% 92%;
+    --ring: 336 74% 43%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --brand-primary: #f06292;
+    --brand-secondary: #2d1a22;
+    --brand-accent: #6d3a4f;
+    --brand-neutral: #1a1216;
+    --brand-text: #f8f4f5;
+    --brand-background: #0d0a0b;
+    --brand-dark-section: #050304;
+
+    --hero-gradient: radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      rgba(194, 24, 91, 0.25) 0%,
+      transparent 70%
+    );
+    --luxury-mesh:
+      radial-gradient(
+        at 40% 20%,
+        rgba(194, 24, 91, 0.15) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 80% 0%,
+        rgba(109, 58, 79, 0.2) 0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at 0% 50%,
+        rgba(240, 98, 146, 0.06) 0px,
+        transparent 50%
+      );
+    --glass-bg: rgba(26, 18, 22, 0.75);
+    --glass-border: rgba(240, 98, 146, 0.12);
+    --glow-shadow:
+      0 0 0 1px rgba(240, 98, 146, 0.15),
+      0 25px 50px -12px rgba(194, 24, 91, 0.35),
+      0 0 60px rgba(194, 24, 91, 0.15);
+
+    --background: 0 4% 6%;
+    --foreground: 0 0% 97%;
+    --card: 0 6% 9%;
+    --card-foreground: 0 0% 97%;
+    --popover: 0 6% 9%;
+    --popover-foreground: 0 0% 97%;
+    --primary: 336 82% 58%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 340 25% 16%;
+    --secondary-foreground: 340 71% 90%;
+    --muted: 340 15% 14%;
+    --muted-foreground: 0 0% 65%;
+    --accent: 340 30% 22%;
+    --accent-foreground: 351 100% 86%;
+    --border: 340 15% 18%;
+    --input: 340 15% 18%;
+    --ring: 336 82% 58%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  body {
+    @apply bg-brand-background font-sans text-brand-text antialiased;
+    overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  ::selection {
+    @apply bg-brand-primary/25 text-brand-primary;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    @apply shadow-glass backdrop-blur-xl;
+  }
+
+  .glass-panel-dark {
+    @apply border border-white/10 bg-brand-text/40 shadow-glass backdrop-blur-xl;
+  }
+
+  .luxury-gradient-text {
+    @apply bg-gradient-to-r from-brand-primary via-[#E91E63] to-brand-accent bg-clip-text text-transparent;
+  }
+
+  .section-padding {
+    @apply px-5 py-20 md:px-8 md:py-28 lg:px-12 lg:py-32;
+  }
+
+  .section-surface {
+    @apply bg-brand-background;
+  }
+
+  .magnetic-hover {
+    @apply transition-transform duration-300 ease-out;
+  }
+
+  .product-glow {
+    @apply transition-all duration-500;
+  }
+
+  .product-glow:hover {
+    box-shadow: var(--glow-shadow);
+  }
+
+  .shimmer-border {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(194, 24, 91, 0.3),
+      transparent
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2.5s linear infinite;
+  }
+
+  .noise-overlay::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.03;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+
+  .dark .noise-overlay::before {
+    opacity: 0.06;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .bg-hero-gradient {
+    background-image: var(--hero-gradient);
+  }
+
+  .bg-luxury-mesh {
+    background-image: var(--luxury-mesh);
+  }
+}
