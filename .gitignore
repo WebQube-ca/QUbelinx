@@ -23,6 +23,8 @@
 *.pem
 .env*.local
 .vercel
+prisma/dev.db
+prisma/dev.db-journal
 
 # debug
 npm-debug.log*

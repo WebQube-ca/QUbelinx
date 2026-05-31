@@ -1,36 +1,35 @@
 import type { Metadata } from "next";
 
 export const siteConfig = {
-  name: "Plate Date by Rhea Jaitha",
-  shortName: "Plate Date",
+  name: "BioBoost",
+  shortName: "BioBoost",
   description:
-    "Premium vegetarian cloud kitchen in Kolkata. Handcrafted brownies, cookies, fudge, vegetarian starters, mains and custom food gifting.",
-  url: "https://platedate.in",
+    "A premium link-in-bio SaaS for creators and businesses turning Instagram traffic into clicks, leads, calls, bookings, and sales.",
+  url: "https://bioboost.app",
   keywords: [
-    "Cloud Kitchen Kolkata",
-    "Dessert Delivery Kolkata",
-    "Brownie Boxes Kolkata",
-    "Vegetarian Desserts Kolkata",
-    "Custom Food Gifts Kolkata",
-    "Vegetarian Food Kolkata",
-    "Party Platters Kolkata",
-    "Plate Date",
-    "Rhea Jaitha",
+    "Link in bio",
+    "Instagram bio link",
+    "Creator tools",
+    "Bio link analytics",
+    "Link hub",
+    "Conversion link page",
+    "Creator monetization",
+    "Small business Instagram",
   ],
-  ogImage: "/plate-date-logo.png",
-  locale: "en_IN",
+  ogImage: "/og-image.svg",
+  locale: "en_US",
 };
 
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} | Luxury Vegetarian Food & Desserts Kolkata`,
+    default: `${siteConfig.name} | Conversion-focused link-in-bio pages`,
     template: `%s | ${siteConfig.shortName}`,
   },
   description: siteConfig.description,
   keywords: siteConfig.keywords,
-  authors: [{ name: "Rhea Jaitha" }],
-  creator: "Rhea Jaitha",
+  authors: [{ name: "BioBoost" }],
+  creator: "BioBoost",
   openGraph: {
     type: "website",
     locale: siteConfig.locale,
@@ -41,9 +40,9 @@ export const defaultMetadata: Metadata = {
     images: [
       {
         url: siteConfig.ogImage,
-        width: 1024,
-        height: 1024,
-        alt: "Plate Date by Rhea Jaitha",
+        width: 1200,
+        height: 630,
+        alt: "BioBoost link-in-bio SaaS dashboard",
       },
     ],
   },
@@ -67,43 +66,27 @@ export const defaultMetadata: Metadata = {
   alternates: {
     canonical: siteConfig.url,
   },
-  icons: {
-    icon: "/plate-date-logo.png",
-    apple: "/plate-date-logo.png",
-  },
 };
 
-export function getLocalBusinessSchema() {
+export function getSoftwareSchema() {
   return {
     "@context": "https://schema.org",
-    "@type": "FoodEstablishment",
+    "@type": "SoftwareApplication",
     name: siteConfig.name,
     description: siteConfig.description,
     url: siteConfig.url,
-    image: `${siteConfig.url}${siteConfig.ogImage}`,
-    servesCuisine: ["Vegetarian", "Desserts", "Italian", "Mexican", "Asian"],
-    priceRange: "₹₹",
-    telephone: "+91 98743 45555",
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Ballygunge",
-      addressRegion: "West Bengal",
-      addressCountry: "IN",
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: 22.5245,
-      longitude: 88.3654,
-    },
-    founder: {
-      "@type": "Person",
-      name: "Rhea Jaitha",
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web",
+    offers: {
+      "@type": "AggregateOffer",
+      lowPrice: "10",
+      highPrice: "60",
+      priceCurrency: "USD",
     },
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: "4.9",
-      reviewCount: "200",
+      reviewCount: "128",
     },
-    sameAs: ["https://www.instagram.com/platedatebyrheajaitha"],
   };
 }

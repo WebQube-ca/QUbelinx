@@ -1,9 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
-import { defaultMetadata, getLocalBusinessSchema } from "@/lib/seo";
-import { FloatingCTA } from "@/components/layout/floating-cta";
-import { Footer } from "@/components/layout/footer";
-import { Navbar } from "@/components/layout/navbar";
+import { defaultMetadata, getSoftwareSchema } from "@/lib/seo";
+import { AppShell } from "@/components/layout/app-shell";
 import { SmoothScrollProvider } from "@/components/layout/smooth-scroll-provider";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { ThemeScript } from "@/components/theme/theme-script";
@@ -25,8 +23,8 @@ export const metadata: Metadata = defaultMetadata;
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#C2185B" },
-    { media: "(prefers-color-scheme: dark)", color: "#0d0a0b" },
+    { media: "(prefers-color-scheme: light)", color: "#f7f8ff" },
+    { media: "(prefers-color-scheme: dark)", color: "#080b16" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -37,7 +35,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const schema = getLocalBusinessSchema();
+  const schema = getSoftwareSchema();
 
   return (
     <html
@@ -57,14 +55,11 @@ export default function RootLayout({
           <SmoothScrollProvider>
             <a
               href="#main-content"
-              className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-brand-primary focus:px-4 focus:py-2 focus:text-white"
+              className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-slate-950 focus:px-4 focus:py-2 focus:text-white"
             >
               Skip to main content
             </a>
-            <Navbar />
-            <main id="main-content">{children}</main>
-            <Footer />
-            <FloatingCTA />
+            <AppShell>{children}</AppShell>
           </SmoothScrollProvider>
         </ThemeProvider>
       </body>
