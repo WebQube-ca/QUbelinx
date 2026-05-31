@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://platedate.in/sitemap.xml
+Sitemap: https://bioboost.app/sitemap.xml

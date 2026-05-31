@@ -15,12 +15,7 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
   },
   experimental: {
-    optimizePackageImports: [
-      "lucide-react",
-      "framer-motion",
-      "gsap",
-      "@radix-ui/react-dialog",
-    ],
+    optimizePackageImports: ["lucide-react", "framer-motion"],
   },
 };
 

@@ -1,66 +1,56 @@
-# Plate Date by Rhea Jaitha
+# BioBoost
 
-Premium luxury cloud kitchen website — Next.js 15, TypeScript, Tailwind CSS, Framer Motion, GSAP, Lenis, Shadcn UI.
+Premium link-in-bio SaaS for creators and businesses turning Instagram traffic into clicks, leads, calls, bookings, and sales.
 
 ## Quick Start
 
 ```bash
-cd ~/Projects/plate-date
 npm install
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Before Launch
+## Environment
 
-1. **WhatsApp** — Update `WHATSAPP_NUMBER` in `src/lib/utils.ts`
-2. **Instagram** — Update `INSTAGRAM_URL` in `src/lib/utils.ts`
-3. **Domain** — Update `siteConfig.url` in `src/lib/seo.ts`
-4. **OG Image** — Add `public/og-image.jpg` (1200×630)
-5. **Photos** — Replace Unsplash URLs with real product photography from [@platedate](https://instagram.com/platedate)
-6. **Google Maps** — Replace embed URL in `src/components/home/contact.tsx` with your exact Ballygunge pin
+Copy the example env file and fill in app-level auth credentials:
 
-## Dark mode
-
-Use the **sun/moon toggle** in the navbar. Preference is saved in `localStorage` (`plate-date-theme`). On first visit, the site follows your system appearance. Story and footer sections stay cinematic dark in both themes.
+```bash
+cp .env.example .env.local
+```
 
 ## Tech Stack
 
 - Next.js 15 (App Router)
 - TypeScript
 - Tailwind CSS + tailwindcss-animate
-- Framer Motion + GSAP ScrollTrigger
+- Framer Motion
+- Auth.js / NextAuth
+- Prisma + SQLite for local auth storage
 - Lenis smooth scroll
-- Shadcn UI (Radix primitives)
-- Swiper.js, React CountUp, React Intersection Observer
+- Radix primitives
 - Lucide Icons
 
 ## Project Structure
 
 ```
 src/
-├── app/           # Routes, layout, SEO (sitemap, robots)
+├── app/           # Landing, auth, dashboard, public profile, SEO
 ├── components/
-│   ├── home/      # Landing sections
-│   ├── menu/      # Menu filtering grid
-│   ├── layout/    # Navbar, footer, CTAs
-│   ├── forms/     # Lead gen → WhatsApp
-│   ├── shared/    # Reusable UI patterns
+│   ├── app/       # Dashboard and public profile UI
+│   ├── auth/      # Login and signup UI
+│   ├── marketing/ # Landing page shell and sections
 │   └── ui/        # Shadcn primitives
-├── data/          # Products, collections, testimonials
-├── hooks/         # Lenis, GSAP reveal, magnetic buttons
-└── lib/           # Utils, SEO config
+├── data/          # BioBoost content, links, pricing
+└── lib/           # Auth, Prisma, utils, SEO config
 ```
 
 ## Performance & SEO
 
 - `next/image` with AVIF/WebP
-- Lazy loading on below-fold images
 - `optimizePackageImports` for heavy libs
-- JSON-LD LocalBusiness schema
+- JSON-LD SoftwareApplication schema
 - OpenGraph + metadata in `src/lib/seo.ts`
-- Target keywords baked into copy and meta
 
 ## Build
 

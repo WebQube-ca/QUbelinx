@@ -1,11 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#FCE4EC"/>
-      <stop offset="100%" style="stop-color:#FFF8F8"/>
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="52%" style="stop-color:#4f46e5"/>
+      <stop offset="100%" style="stop-color:#06b6d4"/>
     </linearGradient>
   </defs>
   <rect width="1200" height="630" fill="url(#bg)"/>
-  <text x="600" y="300" font-family="Georgia, serif" font-size="72" fill="#C2185B" text-anchor="middle" font-weight="600">Plate Date</text>
-  <text x="600" y="360" font-family="system-ui, sans-serif" font-size="28" fill="#1A1A1A" text-anchor="middle" opacity="0.7">Luxury Desserts � Kolkata</text>
+  <circle cx="1040" cy="90" r="220" fill="#ffffff" opacity="0.12"/>
+  <circle cx="130" cy="560" r="260" fill="#ffffff" opacity="0.1"/>
+  <text x="600" y="285" font-family="Inter, system-ui, sans-serif" font-size="92" fill="#ffffff" text-anchor="middle" font-weight="800">BioBoost</text>
+  <text x="600" y="360" font-family="Inter, system-ui, sans-serif" font-size="32" fill="#e0f2fe" text-anchor="middle">Conversion-focused link-in-bio pages</text>
 </svg>

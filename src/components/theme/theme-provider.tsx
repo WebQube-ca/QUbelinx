@@ -18,7 +18,7 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-const STORAGE_KEY = "plate-date-theme";
+const STORAGE_KEY = "bioboost-theme";
 
 function getInitialTheme(): Theme {
   if (typeof window === "undefined") return "light";
