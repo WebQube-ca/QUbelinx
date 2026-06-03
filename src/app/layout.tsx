@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
-import { defaultMetadata, getSoftwareSchema } from "@/lib/seo";
+import { defaultMetadata, getBrandSchema } from "@/lib/seo";
 import { AppShell } from "@/components/layout/app-shell";
 import { SmoothScrollProvider } from "@/components/layout/smooth-scroll-provider";
 import { ThemeProvider } from "@/components/theme/theme-provider";
@@ -23,8 +23,8 @@ export const metadata: Metadata = defaultMetadata;
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f7f8ff" },
-    { media: "(prefers-color-scheme: dark)", color: "#080b16" },
+    { media: "(prefers-color-scheme: light)", color: "#080808" },
+    { media: "(prefers-color-scheme: dark)", color: "#080808" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -35,7 +35,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const schema = getSoftwareSchema();
+  const schema = getBrandSchema();
 
   return (
     <html

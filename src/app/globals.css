@@ -4,100 +4,100 @@
 
 @layer base {
   :root {
-    --brand-primary: 124 58 237;
-    --brand-secondary: 238 242 255;
-    --brand-accent: 34 211 238;
-    --brand-neutral: 248 250 252;
-    --brand-text: 15 23 42;
-    --brand-background: 247 248 255;
-    --brand-dark-section: 8 11 22;
+    --brand-primary: 212 175 55;
+    --brand-secondary: 17 17 17;
+    --brand-accent: 229 199 125;
+    --brand-neutral: 17 17 17;
+    --brand-text: 255 255 255;
+    --brand-background: 8 8 8;
+    --brand-dark-section: 8 8 8;
 
     --hero-gradient: radial-gradient(
       ellipse 80% 60% at 50% 0%,
-        rgba(124, 58, 237, 0.16) 0%,
+        rgba(212, 175, 55, 0.16) 0%,
       transparent 70%
     );
     --luxury-mesh:
       radial-gradient(
         at 40% 20%,
-        rgba(34, 211, 238, 0.22) 0px,
+        rgba(229, 199, 125, 0.2) 0px,
         transparent 50%
       ),
       radial-gradient(
         at 80% 0%,
-        rgba(124, 58, 237, 0.18) 0px,
+        rgba(212, 175, 55, 0.16) 0px,
         transparent 50%
       ),
       radial-gradient(
         at 0% 50%,
-        rgba(14, 165, 233, 0.14) 0px,
+        rgba(255, 255, 255, 0.08) 0px,
         transparent 50%
       );
-    --glass-bg: rgba(255, 255, 255, 0.6);
-    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass-bg: rgba(17, 17, 17, 0.66);
+    --glass-border: rgba(212, 175, 55, 0.18);
     --glow-shadow:
-      0 0 0 1px rgba(124, 58, 237, 0.1),
-      0 25px 50px -12px rgba(79, 70, 229, 0.2),
-      0 0 60px rgba(34, 211, 238, 0.22);
+      0 0 0 1px rgba(212, 175, 55, 0.16),
+      0 25px 50px -12px rgba(212, 175, 55, 0.18),
+      0 0 60px rgba(229, 199, 125, 0.16);
 
-    --background: 0 0% 100%;
-    --foreground: 0 0% 10%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 10%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 10%;
-    --primary: 258 90% 66%;
+    --background: 0 0% 3%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 45 65% 52%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 226 100% 97%;
-    --secondary-foreground: 222 47% 11%;
-    --muted: 220 33% 96%;
-    --muted-foreground: 0 0% 40%;
-    --accent: 187 92% 69%;
-    --accent-foreground: 222 47% 11%;
+    --secondary: 0 0% 7%;
+    --secondary-foreground: 45 62% 69%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 65%;
+    --accent: 45 62% 69%;
+    --accent-foreground: 0 0% 3%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 220 31% 91%;
-    --input: 220 31% 91%;
-    --ring: 258 90% 66%;
+    --border: 0 0% 16%;
+    --input: 0 0% 16%;
+    --ring: 45 65% 52%;
     --radius: 0.75rem;
   }
 
   .dark {
-    --brand-primary: 240 98 146;
-    --brand-secondary: 45 26 34;
-    --brand-accent: 109 58 79;
-    --brand-neutral: 26 18 22;
-    --brand-text: 248 244 245;
-    --brand-background: 13 10 11;
-    --brand-dark-section: 5 3 4;
+    --brand-primary: 212 175 55;
+    --brand-secondary: 17 17 17;
+    --brand-accent: 229 199 125;
+    --brand-neutral: 17 17 17;
+    --brand-text: 255 255 255;
+    --brand-background: 8 8 8;
+    --brand-dark-section: 8 8 8;
 
     --hero-gradient: radial-gradient(
       ellipse 80% 60% at 50% 0%,
-      rgba(194, 24, 91, 0.25) 0%,
+      rgba(212, 175, 55, 0.22) 0%,
       transparent 70%
     );
     --luxury-mesh:
       radial-gradient(
         at 40% 20%,
-        rgba(194, 24, 91, 0.15) 0px,
+        rgba(229, 199, 125, 0.16) 0px,
         transparent 50%
       ),
       radial-gradient(
         at 80% 0%,
-        rgba(109, 58, 79, 0.2) 0px,
+        rgba(212, 175, 55, 0.16) 0px,
         transparent 50%
       ),
       radial-gradient(
         at 0% 50%,
-        rgba(240, 98, 146, 0.06) 0px,
+        rgba(255, 255, 255, 0.08) 0px,
         transparent 50%
       );
-    --glass-bg: rgba(26, 18, 22, 0.75);
-    --glass-border: rgba(240, 98, 146, 0.12);
+    --glass-bg: rgba(17, 17, 17, 0.75);
+    --glass-border: rgba(212, 175, 55, 0.16);
     --glow-shadow:
-      0 0 0 1px rgba(240, 98, 146, 0.15),
-      0 25px 50px -12px rgba(194, 24, 91, 0.35),
-      0 0 60px rgba(194, 24, 91, 0.15);
+      0 0 0 1px rgba(212, 175, 55, 0.16),
+      0 25px 50px -12px rgba(212, 175, 55, 0.2),
+      0 0 60px rgba(229, 199, 125, 0.14);
 
     --background: 0 4% 6%;
     --foreground: 0 0% 97%;
@@ -105,17 +105,17 @@
     --card-foreground: 0 0% 97%;
     --popover: 0 6% 9%;
     --popover-foreground: 0 0% 97%;
-    --primary: 336 82% 58%;
+    --primary: 45 65% 52%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 340 25% 16%;
-    --secondary-foreground: 340 71% 90%;
-    --muted: 340 15% 14%;
+    --secondary: 0 0% 7%;
+    --secondary-foreground: 45 62% 69%;
+    --muted: 0 0% 10%;
     --muted-foreground: 0 0% 65%;
-    --accent: 340 30% 22%;
-    --accent-foreground: 351 100% 86%;
-    --border: 340 15% 18%;
-    --input: 340 15% 18%;
-    --ring: 336 82% 58%;
+    --accent: 45 62% 69%;
+    --accent-foreground: 0 0% 3%;
+    --border: 0 0% 16%;
+    --input: 0 0% 16%;
+    --ring: 45 65% 52%;
   }
 
   * {
@@ -150,7 +150,7 @@
   }
 
   ::selection {
-    @apply bg-brand-primary/25 text-brand-primary;
+    @apply bg-brand-primary/25 text-brand-accent;
   }
 }
 
@@ -166,7 +166,7 @@
   }
 
   .luxury-gradient-text {
-    @apply bg-gradient-to-r from-brand-primary via-[#E91E63] to-brand-accent bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-brand-primary via-[#fff0b8] to-brand-accent bg-clip-text text-transparent;
   }
 
   .section-padding {
@@ -193,7 +193,7 @@
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(194, 24, 91, 0.3),
+      rgba(212, 175, 55, 0.35),
       transparent
     );
     background-size: 200% 100%;

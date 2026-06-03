@@ -1,35 +1,36 @@
 import type { Metadata } from "next";
 
 export const siteConfig = {
-  name: "BioBoost",
-  shortName: "BioBoost",
+  name: "Resin Passion",
+  shortName: "Resin Passion",
   description:
-    "A premium link-in-bio SaaS for creators and businesses turning Instagram traffic into clicks, leads, calls, bookings, and sales.",
-  url: "https://bioboost.app",
+    "Premium handmade resin clocks, personalized name plates, luxury gifts, and custom resin art pieces crafted in Mumbai, India.",
+  url: "https://resinpassion.in",
   keywords: [
-    "Link in bio",
-    "Instagram bio link",
-    "Creator tools",
-    "Bio link analytics",
-    "Link hub",
-    "Conversion link page",
-    "Creator monetization",
-    "Small business Instagram",
+    "Handmade resin art Mumbai",
+    "Customized resin wall clocks",
+    "Personalized name plates",
+    "Luxury handmade gifts India",
+    "Wedding resin gifts",
+    "Anniversary gifts Mumbai",
+    "Housewarming gifts India",
+    "Custom resin art pieces",
+    "Luxury home decor Mumbai",
   ],
-  ogImage: "/og-image.svg",
-  locale: "en_US",
+  ogImage: "/resin-passion-logo.png",
+  locale: "en_IN",
 };
 
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} | Conversion-focused link-in-bio pages`,
+    default: `${siteConfig.name} | Premium Handmade Resin Art`,
     template: `%s | ${siteConfig.shortName}`,
   },
   description: siteConfig.description,
   keywords: siteConfig.keywords,
-  authors: [{ name: "BioBoost" }],
-  creator: "BioBoost",
+  authors: [{ name: "Resin Passion" }],
+  creator: "Resin Passion",
   openGraph: {
     type: "website",
     locale: siteConfig.locale,
@@ -42,7 +43,7 @@ export const defaultMetadata: Metadata = {
         url: siteConfig.ogImage,
         width: 1200,
         height: 630,
-        alt: "BioBoost link-in-bio SaaS dashboard",
+        alt: "Resin Passion luxury handmade resin art logo",
       },
     ],
   },
@@ -68,25 +69,34 @@ export const defaultMetadata: Metadata = {
   },
 };
 
-export function getSoftwareSchema() {
+export function getBrandSchema() {
   return {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
+    "@type": "LocalBusiness",
     name: siteConfig.name,
     description: siteConfig.description,
     url: siteConfig.url,
-    applicationCategory: "BusinessApplication",
-    operatingSystem: "Web",
-    offers: {
-      "@type": "AggregateOffer",
-      lowPrice: "10",
-      highPrice: "60",
-      priceCurrency: "USD",
+    image: `${siteConfig.url}${siteConfig.ogImage}`,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Mumbai",
+      addressRegion: "Maharashtra",
+      addressCountry: "IN",
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.9",
-      reviewCount: "128",
+    sameAs: [
+      "https://www.instagram.com/resinpassion2026?igsh=aDFqajdhcThxazd1",
+    ],
+    makesOffer: {
+      "@type": "OfferCatalog",
+      name: "Custom handmade resin art",
+      itemListElement: [
+        "Customized Resin Wall Clocks",
+        "Personalized Name Plates",
+        "Wedding Gifts",
+        "Anniversary Gifts",
+        "Housewarming Gifts",
+        "Luxury Home Decor",
+      ],
     },
   };
 }

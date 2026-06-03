@@ -13,7 +13,7 @@ import {
   Zap,
 } from "lucide-react";
 
-export const appName = "BioBoost";
+export const appName = "Resin Passion";
 
 export const features = [
   {
