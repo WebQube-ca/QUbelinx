@@ -3,18 +3,19 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, MessageCircle, X } from "lucide-react";
+import { Instagram, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { appName } from "@/data/linkhub";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
+  { href: "/#collections", label: "Collections" },
   { href: "/#story", label: "Story" },
-  { href: "/#collection", label: "Collection" },
-  { href: "/#process", label: "Process" },
-  { href: "/#gallery", label: "Gallery" },
-  { href: "/#contact", label: "Contact" },
+  { href: "/#signature", label: "Signature" },
+  { href: "/#gifting", label: "Gifting" },
 ];
+
+const instagramUrl = "https://www.instagram.com/melt.bombay?igsh=Y21oYjlnenl5cnFv";
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
@@ -32,23 +33,23 @@ export function SiteHeader() {
       className={cn(
         "fixed left-0 right-0 top-0 z-50 px-5 py-4 transition-all md:px-8 lg:px-12",
         scrolled
-          ? "border-b border-white/10 bg-[#080808]/78 shadow-[0_18px_50px_rgba(0,0,0,0.28)] backdrop-blur-2xl"
+          ? "border-b border-[#4A2C2A]/10 bg-[#FFF8F3]/78 shadow-[0_18px_50px_rgba(74,44,42,0.10)] backdrop-blur-2xl"
           : "bg-transparent"
       )}
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 font-black text-white">
-          <span className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border border-[#D4AF37]/35 bg-white shadow-lg">
+        <Link href="/" className="flex items-center gap-3 font-black text-[#4A2C2A]">
+          <span className="relative h-12 w-12 overflow-hidden rounded-full border border-[#C8A96B]/40 bg-[#4A2C2A] shadow-[0_0_35px_rgba(245,216,226,0.36)] backdrop-blur-xl">
             <Image
-              src="/resin-passion-logo.png"
-              alt="Resin Passion logo"
-              width={48}
-              height={48}
-              className="h-full w-full object-cover"
+              src="/melt-bombay-logo-v2.png"
+              alt="MELT BOMBAY logo"
+              fill
+              sizes="48px"
+              className="object-cover"
               priority
             />
           </span>
-          <span className="font-display text-xl font-semibold tracking-tight">
+          <span className="font-display text-xl font-semibold tracking-[-0.04em]">
             {appName}
           </span>
         </Link>
@@ -58,7 +59,7 @@ export function SiteHeader() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-semibold text-white/62 transition hover:text-[#E5C77D]"
+              className="text-sm font-semibold text-[#4A2C2A]/62 transition hover:text-[#4A2C2A]"
             >
               {link.label}
             </Link>
@@ -69,27 +70,27 @@ export function SiteHeader() {
           <Button
             asChild
             variant="outline"
-            className="border-[#D4AF37]/35 bg-transparent text-[#E5C77D] hover:bg-[#D4AF37]/10"
+            className="border-[#4A2C2A]/15 bg-white/35 text-[#4A2C2A] hover:bg-[#F5D8E2]/70"
           >
             <a
-              href="https://www.instagram.com/resinpassion2026?igsh=aDFqajdhcThxazd1"
+              href={instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
             >
+              <Instagram className="h-4 w-4" />
               Instagram
             </a>
           </Button>
-          <Button asChild className="bg-[#D4AF37] text-black hover:bg-[#E5C77D]">
-            <Link href="/#contact">
-              <MessageCircle className="h-4 w-4" />
-              Custom Order
-            </Link>
+          <Button asChild className="bg-[#4A2C2A] text-[#FFF8F3] hover:bg-[#2B1716]">
+            <a href={instagramUrl} target="_blank" rel="noopener noreferrer">
+              Order Now
+            </a>
           </Button>
         </div>
 
         <button
           type="button"
-          className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/10 text-white backdrop-blur lg:hidden"
+          className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[#4A2C2A]/10 bg-white/50 text-[#4A2C2A] backdrop-blur lg:hidden"
           onClick={() => setOpen((value) => !value)}
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
@@ -99,23 +100,23 @@ export function SiteHeader() {
       </nav>
 
       {open && (
-        <div className="mx-auto mt-4 max-w-7xl rounded-[2rem] border border-white/10 bg-[#111111]/95 p-4 shadow-xl backdrop-blur-xl lg:hidden">
+        <div className="mx-auto mt-4 max-w-7xl rounded-[2rem] border border-[#4A2C2A]/10 bg-[#FFF8F3]/95 p-4 shadow-xl backdrop-blur-xl lg:hidden">
           <div className="grid gap-2">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className="rounded-2xl px-4 py-3 font-semibold text-white/70 hover:bg-white/10 hover:text-white"
+                className="rounded-2xl px-4 py-3 font-semibold text-[#4A2C2A]/70 hover:bg-[#F5D8E2]/60 hover:text-[#4A2C2A]"
               >
                 {link.label}
               </Link>
             ))}
             <div className="mt-2 grid gap-2">
-              <Button asChild className="bg-[#D4AF37] text-black hover:bg-[#E5C77D]">
-                <Link href="/#contact" onClick={() => setOpen(false)}>
-                  Custom Order
-                </Link>
+              <Button asChild className="bg-[#4A2C2A] text-[#FFF8F3] hover:bg-[#2B1716]">
+                <a href={instagramUrl} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>
+                  Order Now
+                </a>
               </Button>
             </div>
           </div>

@@ -1,36 +1,36 @@
 import type { Metadata } from "next";
 
 export const siteConfig = {
-  name: "Resin Passion",
-  shortName: "Resin Passion",
+  name: "MELT BOMBAY",
+  shortName: "MELT BOMBAY",
   description:
-    "Premium handmade resin clocks, personalized name plates, luxury gifts, and custom resin art pieces crafted in Mumbai, India.",
-  url: "https://resinpassion.in",
+    "Premium eggless cookies, brownies, cookie tins, dessert boxes, and luxury gifting handcrafted in Lower Parel, Mumbai.",
+  url: "https://meltbombay.com",
   keywords: [
-    "Handmade resin art Mumbai",
-    "Customized resin wall clocks",
-    "Personalized name plates",
-    "Luxury handmade gifts India",
-    "Wedding resin gifts",
-    "Anniversary gifts Mumbai",
-    "Housewarming gifts India",
-    "Custom resin art pieces",
-    "Luxury home decor Mumbai",
+    "MELT BOMBAY",
+    "eggless desserts Mumbai",
+    "premium cookies Mumbai",
+    "stuffed cookies Mumbai",
+    "cookie tins Mumbai",
+    "eggless brownies",
+    "luxury dessert boxes",
+    "corporate gifting Mumbai",
+    "Lower Parel bakery",
   ],
-  ogImage: "/resin-passion-logo.png",
+  ogImage: "/og-image.svg",
   locale: "en_IN",
 };
 
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} | Premium Handmade Resin Art`,
+    default: `${siteConfig.name} | Eggless Desserts That Melt In Your Mouth`,
     template: `%s | ${siteConfig.shortName}`,
   },
   description: siteConfig.description,
   keywords: siteConfig.keywords,
-  authors: [{ name: "Resin Passion" }],
-  creator: "Resin Passion",
+  authors: [{ name: "MELT BOMBAY" }],
+  creator: "MELT BOMBAY",
   openGraph: {
     type: "website",
     locale: siteConfig.locale,
@@ -43,7 +43,7 @@ export const defaultMetadata: Metadata = {
         url: siteConfig.ogImage,
         width: 1200,
         height: 630,
-        alt: "Resin Passion luxury handmade resin art logo",
+        alt: "MELT BOMBAY premium eggless desserts and gifting",
       },
     ],
   },
@@ -72,30 +72,24 @@ export const defaultMetadata: Metadata = {
 export function getBrandSchema() {
   return {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
+    "@type": "Brand",
     name: siteConfig.name,
     description: siteConfig.description,
     url: siteConfig.url,
     image: `${siteConfig.url}${siteConfig.ogImage}`,
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Mumbai",
-      addressRegion: "Maharashtra",
-      addressCountry: "IN",
-    },
     sameAs: [
-      "https://www.instagram.com/resinpassion2026?igsh=aDFqajdhcThxazd1",
+      "https://www.instagram.com/melt.bombay?igsh=Y21oYjlnenl5cnFv",
     ],
     makesOffer: {
       "@type": "OfferCatalog",
-      name: "Custom handmade resin art",
+      name: "Premium eggless dessert collections",
       itemListElement: [
-        "Customized Resin Wall Clocks",
-        "Personalized Name Plates",
-        "Wedding Gifts",
-        "Anniversary Gifts",
-        "Housewarming Gifts",
-        "Luxury Home Decor",
+        "Premium Cookies",
+        "Stuffed Cookies",
+        "Cookie Tins",
+        "Brownies",
+        "Dessert Boxes",
+        "Corporate Gifting",
       ],
     },
   };

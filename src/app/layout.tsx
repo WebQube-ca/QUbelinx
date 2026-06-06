@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Playfair_Display, Inter } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import { defaultMetadata, getBrandSchema } from "@/lib/seo";
 import { AppShell } from "@/components/layout/app-shell";
 import { SmoothScrollProvider } from "@/components/layout/smooth-scroll-provider";
@@ -23,8 +23,8 @@ export const metadata: Metadata = defaultMetadata;
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#080808" },
-    { media: "(prefers-color-scheme: dark)", color: "#080808" },
+    { media: "(prefers-color-scheme: light)", color: "#FFF8F3" },
+    { media: "(prefers-color-scheme: dark)", color: "#4A2C2A" },
   ],
   width: "device-width",
   initialScale: 1,

@@ -138,7 +138,7 @@ export function AuthCard({ mode }: { mode: AuthMode }) {
             </Button>
           </form>
           <p className="mt-6 text-center text-sm text-slate-500">
-            {isSignup ? "Already have an account?" : "New to BioBoost?"}{" "}
+            {isSignup ? "Already have an account?" : "New to MELT BOMBAY?"}{" "}
             <Link
               href={isSignup ? "/login" : "/signup"}
               className="font-bold text-violet-600"

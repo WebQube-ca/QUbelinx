@@ -18,7 +18,7 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-const STORAGE_KEY = "resin-passion-theme";
+const STORAGE_KEY = "melt-bombay-theme";
 
 function getInitialTheme(): Theme {
   if (typeof window === "undefined") return "light";

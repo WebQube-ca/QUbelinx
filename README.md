@@ -1,6 +1,6 @@
-# BioBoost
+# MELT BOMBAY
 
-Premium link-in-bio SaaS for creators and businesses turning Instagram traffic into clicks, leads, calls, bookings, and sales.
+Premium eggless dessert atelier website for MELT BOMBAY, built with cinematic motion, WebGL dessert visuals, luxury editorial sections, conversion-focused CTAs, and responsive storytelling.
 
 ## Quick Start
 
@@ -25,6 +25,9 @@ cp .env.example .env.local
 - TypeScript
 - Tailwind CSS + tailwindcss-animate
 - Framer Motion
+- React Three Fiber + Drei + Three.js
+- Postprocessing effects
+- GSAP
 - Auth.js / NextAuth
 - Prisma + SQLite for local auth storage
 - Lenis smooth scroll
@@ -41,7 +44,7 @@ src/
 │   ├── auth/      # Login and signup UI
 │   ├── marketing/ # Landing page shell and sections
 │   └── ui/        # Shadcn primitives
-├── data/          # BioBoost content, links, pricing
+├── data/          # Shared brand and supporting content
 └── lib/           # Auth, Prisma, utils, SEO config
 ```
 
@@ -49,7 +52,7 @@ src/
 
 - `next/image` with AVIF/WebP
 - `optimizePackageImports` for heavy libs
-- JSON-LD SoftwareApplication schema
+- JSON-LD brand schema
 - OpenGraph + metadata in `src/lib/seo.ts`
 
 ## Build

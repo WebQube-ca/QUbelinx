@@ -13,7 +13,7 @@ import {
   Zap,
 } from "lucide-react";
 
-export const appName = "Resin Passion";
+export const appName = "MELT BOMBAY";
 
 export const features = [
   {
@@ -44,7 +44,7 @@ export const features = [
     icon: ShieldCheck,
     title: "Brand control",
     description:
-      "Remove BioBoost branding, organize campaigns, and keep your highest-value offers in priority placement.",
+      "Remove platform branding, organize campaigns, and keep your highest-value offers in priority placement.",
   },
   {
     icon: Users,
@@ -105,7 +105,7 @@ export const pricingPlans = [
       "4 conversion links",
       "Basic analytics",
       "Email tech support",
-      "BioBoost branding",
+      "Platform branding",
     ],
   },
   {
@@ -146,7 +146,7 @@ export const pricingPlans = [
 export const testimonials = [
   {
     quote:
-      "We moved from a basic link page to BioBoost and finally saw which Instagram clicks were turning into consult calls.",
+      "We moved from a basic link page to a polished branded hub and finally saw which Instagram clicks were turning into consult calls.",
     name: "Maya Singh",
     role: "Founder, Glow Studio",
     image:

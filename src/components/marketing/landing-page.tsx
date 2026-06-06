@@ -1,208 +1,138 @@
 "use client";
 
 import Image from "next/image";
-import type { FormEvent, ReactNode, RefObject } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  AnimatePresence,
-  motion,
-  useScroll,
-  useTransform,
-  type MotionValue,
-} from "framer-motion";
+import { AnimatePresence, motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowRight,
-  CheckCircle2,
-  ChevronDown,
-  Clock3,
-  Crown,
+  Building2,
+  CakeSlice,
+  ChefHat,
   Gift,
-  Heart,
-  Home,
   Instagram,
-  MessageCircle,
-  Play,
-  ShieldCheck,
+  PackageCheck,
+  Quote,
+  Send,
   Sparkles,
   Star,
-  WandSparkles,
-  type LucideIcon,
+  Timer,
+  WheatOff,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
-const instagramUrl =
-  "https://www.instagram.com/resinpassion2026?igsh=aDFqajdhcThxazd1";
+const instagramUrl = "https://www.instagram.com/melt.bombay?igsh=Y21oYjlnenl5cnFv";
 
-const logoSrc = "/resin-passion-logo.png";
+const heroImage =
+  "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=1600&q=88";
 
-const whatsappNumber = "";
-
-const whatsappText =
-  "Hello Resin Passion, I would like to start a custom resin art order.";
-
-function getWhatsappUrl(message = whatsappText) {
-  const encodedMessage = encodeURIComponent(message);
-  return whatsappNumber
-    ? `https://wa.me/${whatsappNumber}?text=${encodedMessage}`
-    : `https://wa.me/?text=${encodedMessage}`;
-}
-
-type ArtworkKind = "clock" | "nameplate" | "gift" | "decor";
-
-const products = [
+const collections = [
   {
-    title: "Resin Wall Clocks",
-    copy: "Sculptural clocks with metallic pigments, preserved florals, initials, and luminous gold detailing.",
-    artwork: "clock" as ArtworkKind,
+    title: "Stuffed Cookies",
+    copy: "Molten centres, crisp edges, and flavours that feel made for late-night gifting.",
+    image: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=1200&q=86",
+    accent: "from-[#F5D8E2]/80 to-[#C8A96B]/40",
   },
   {
-    title: "Personalized Name Plates",
-    copy: "Elegant entry pieces crafted to introduce a home with warmth, ceremony, and individuality.",
-    artwork: "nameplate" as ArtworkKind,
+    title: "Cookie Tins",
+    copy: "Keepsake tins layered with handcrafted cookies, tissue, ribbon, and a quiet sense of occasion.",
+    image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=1200&q=86",
+    accent: "from-[#DFA8B6]/70 to-[#4A2C2A]/40",
   },
   {
-    title: "Custom Gifts",
-    copy: "Wedding, anniversary, birthday, and housewarming keepsakes designed around a memory.",
-    artwork: "gift" as ArtworkKind,
+    title: "Brownies",
+    copy: "Dense, glossy, chocolate-rich squares baked in small batches for a deep cocoa finish.",
+    image: "https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?auto=format&fit=crop&w=1200&q=86",
+    accent: "from-[#4A2C2A]/70 to-[#C8A96B]/40",
   },
   {
-    title: "Luxury Home Decor",
-    copy: "Statement resin pieces for console tables, walls, foyers, bedrooms, and styled interiors.",
-    artwork: "decor" as ArtworkKind,
+    title: "Gifting Boxes",
+    copy: "Pink, polished, and personal. Designed for birthdays, weddings, launches, and boardroom thank-yous.",
+    image: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=1200&q=86",
+    accent: "from-[#F5D8E2]/90 to-[#DFA8B6]/50",
   },
 ];
 
-const processSteps = [
-  "Share Your Idea",
-  "Design Consultation",
-  "Handcrafted Creation",
-  "Quality Check",
-  "Delivered To Your Door",
-];
-
-const galleryImages = [
+const signatureProducts = [
   {
-    artwork: "clock" as ArtworkKind,
-    title: "Luxury Resin Wall Clock",
-    span: "md:row-span-2",
+    name: "Biscoff Melt Cookie",
+    note: "Spiced caramel core, vanilla crumb, gold-dusted finish",
+    price: "From ₹240",
+    image: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?auto=format&fit=crop&w=1100&q=86",
   },
   {
-    artwork: "nameplate" as ArtworkKind,
-    title: "Personalized Gold Name Plate",
-    span: "",
+    name: "Dark Chocolate Brownies",
+    note: "Fudgy eggless chocolate, sea salt, glossy crackle top",
+    price: "From ₹620",
+    image: "https://images.unsplash.com/photo-1564355808539-22fda35bed7e?auto=format&fit=crop&w=1100&q=86",
   },
   {
-    artwork: "gift" as ArtworkKind,
-    title: "Wedding Resin Gift",
-    span: "",
+    name: "Celebration Dessert Box",
+    note: "Cookies, brownies, note card, ribboned luxury packaging",
+    price: "From ₹1,450",
+    image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=1100&q=86",
   },
   {
-    artwork: "decor" as ArtworkKind,
-    title: "Luxury Resin Decor Panel",
-    span: "md:row-span-2",
-  },
-  {
-    artwork: "clock" as ArtworkKind,
-    title: "Floral Resin Clock Detail",
-    span: "",
-  },
-  {
-    artwork: "nameplate" as ArtworkKind,
-    title: "Custom Home Name Plate",
-    span: "",
+    name: "Signature Cookie Tin",
+    note: "A curated tin for hosts, founders, families, and clients",
+    price: "From ₹1,250",
+    image: "https://images.unsplash.com/photo-1481391243133-f96216dcb5d2?auto=format&fit=crop&w=1100&q=86",
   },
 ];
 
-type Reason = [string, string, LucideIcon];
-
-const reasons: Reason[] = [
-  ["Handmade Excellence", "Every pour, polish, and gold detail is finished by hand.", WandSparkles],
-  ["Premium Materials", "High-gloss resin, metallic pigments, florals, stones, and durable finishes.", ShieldCheck],
-  ["Fully Customized", "Names, colors, dates, themes, symbols, and gift stories are designed around you.", Sparkles],
-  ["Made In India", "Crafted in Mumbai for homes and celebrations across India.", Crown],
-  ["Perfect For Gifting", "Designed to feel personal, premium, and emotionally memorable.", Gift],
-  ["Unique Designs", "No two resin pieces are ever exactly the same.", Star],
+const storyMoments = [
+  ["01", "A Mumbai kitchen", "MELT BOMBAY began with the feeling of a warm cookie being broken open at the table."],
+  ["02", "Eggless, without compromise", "Every recipe is developed to feel rich, tender, and indulgent while remaining 100% eggless."],
+  ["03", "Wrapped like a keepsake", "Packaging is treated as part of the dessert: tactile, pink, polished, and gift-ready."],
 ];
+
+const reasons = [
+  ["100% Eggless", "No eggs, no compromise on texture, structure, or indulgence.", WheatOff],
+  ["Small Batch", "Baked in measured runs so every box feels fresh and intentional.", Timer],
+  ["Handcrafted", "Piped, folded, filled, packed, and finished by human hands.", ChefHat],
+  ["Premium Ingredients", "Couverture chocolate, real butter notes, nuts, spices, and curated fillings.", Sparkles],
+  ["Luxury Packaging", "Designed to arrive like a present before the first bite.", PackageCheck],
+  ["Freshly Baked", "Made close to dispatch for that just-baked fragrance and softness.", CakeSlice],
+] as const;
 
 const testimonials = [
   {
-    name: "Rhea & Kunal",
-    role: "Wedding gift order",
-    quote:
-      "The clock felt like a memory preserved in gold. Everyone asked where we got it made.",
-    image: logoSrc,
+    name: "Rhea M.",
+    role: "Birthday gifting order",
+    quote: "The box looked like a luxury beauty drop and tasted even better. Everyone asked where it was from.",
   },
   {
-    name: "Ananya Mehta",
-    role: "New home name plate",
-    quote:
-      "It made our entrance look premium instantly. The finish is glossy, rich, and beautifully personal.",
-    image: logoSrc,
+    name: "Aarav S.",
+    role: "Corporate client",
+    quote: "We sent MELT BOMBAY tins to partners and the response was immediate. Premium, polished, memorable.",
   },
   {
-    name: "Vikram Shah",
-    role: "Anniversary keepsake",
-    quote:
-      "The consultation was thoughtful and the final piece looked far more luxurious than a regular gift.",
-    image: logoSrc,
+    name: "Naina K.",
+    role: "Cookie obsessive",
+    quote: "I usually avoid eggless desserts. These changed my mind in one bite. The stuffed cookies are unreal.",
   },
 ];
 
-type Occasion = [string, LucideIcon];
-
-const occasions: Occasion[] = [
-  ["Weddings", Heart],
-  ["Anniversaries", Clock3],
-  ["Birthdays", Gift],
-  ["Housewarming", Home],
-  ["Corporate Gifts", Crown],
-  ["Festivals", Sparkles],
+const socialPosts = [
+  "https://images.unsplash.com/photo-1488477304112-4944851de03d?auto=format&fit=crop&w=900&q=86",
+  "https://images.unsplash.com/photo-1603532648955-039310d9ed75?auto=format&fit=crop&w=900&q=86",
+  "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=900&q=86",
+  "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=900&q=86",
+  "https://images.unsplash.com/photo-1612203985729-70726954388c?auto=format&fit=crop&w=900&q=86",
+  "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=900&q=86",
 ];
 
-const faqs = [
-  {
-    q: "Can every resin piece be customized?",
-    a: "Yes. Colors, names, dates, florals, gold detailing, size, theme, and product type can be personalized after a design consultation.",
-  },
-  {
-    q: "How long does a custom order take?",
-    a: "Most custom pieces take 7-15 working days depending on size, complexity, curing time, and finishing requirements.",
-  },
-  {
-    q: "Do you deliver outside Mumbai?",
-    a: "Yes. Orders can be packed carefully and shipped across India, subject to product size and courier availability.",
-  },
-  {
-    q: "How do I place an order?",
-    a: "Share your idea on WhatsApp, select the product type, confirm the design direction, and the piece is handcrafted after confirmation.",
-  },
-];
-
-const instagramPosts = [
-  "Clock collection",
-  "Name plate reveal",
-  "Wedding gift edit",
-  "Gold pour detail",
-];
+const process = ["Choose", "Order", "Bake", "Deliver", "Enjoy"];
 
 export function LandingPage() {
-  const [loading, setLoading] = useState(true);
+  const [cursor, setCursor] = useState({ x: 50, y: 50 });
+  const [activeProduct, setActiveProduct] = useState(0);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
-  const [light, setLight] = useState({ x: 50, y: 20 });
   const pageRef = useRef<HTMLDivElement>(null);
-  const heroRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll();
-  const heroY = useTransform(scrollYProgress, [0, 0.35], [0, 150]);
-
-  useEffect(() => {
-    const timer = window.setTimeout(() => setLoading(false), 1200);
-    return () => window.clearTimeout(timer);
-  }, []);
+  const heroY = useTransform(scrollYProgress, [0, 0.28], [0, 150]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.22], [1, 0.18]);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -211,24 +141,35 @@ export function LandingPage() {
       gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((element) => {
         gsap.fromTo(
           element,
-          { autoAlpha: 0, y: 44, filter: "blur(14px)" },
+          { autoAlpha: 0, y: 64, filter: "blur(18px)" },
           {
             autoAlpha: 1,
             y: 0,
             filter: "blur(0px)",
-            duration: 1.1,
+            duration: 1.15,
             ease: "power3.out",
-            scrollTrigger: {
-              trigger: element,
-              start: "top 82%",
-            },
+            scrollTrigger: { trigger: element, start: "top 84%" },
           }
         );
       });
 
-      gsap.utils.toArray<HTMLElement>("[data-parallax]").forEach((element) => {
+      gsap.utils.toArray<HTMLElement>("[data-image-reveal]").forEach((element) => {
+        gsap.fromTo(
+          element,
+          { clipPath: "inset(18% 18% 18% 18% round 42px)", scale: 1.08 },
+          {
+            clipPath: "inset(0% 0% 0% 0% round 42px)",
+            scale: 1,
+            duration: 1.35,
+            ease: "power4.out",
+            scrollTrigger: { trigger: element, start: "top 82%" },
+          }
+        );
+      });
+
+      gsap.utils.toArray<HTMLElement>("[data-drift]").forEach((element) => {
         gsap.to(element, {
-          yPercent: Number(element.dataset.parallax) || -12,
+          yPercent: Number(element.dataset.drift) || -12,
           ease: "none",
           scrollTrigger: {
             trigger: element,
@@ -246,278 +187,217 @@ export function LandingPage() {
   useEffect(() => {
     const timer = window.setInterval(() => {
       setActiveTestimonial((value) => (value + 1) % testimonials.length);
-    }, 4200);
+    }, 4400);
     return () => window.clearInterval(timer);
   }, []);
 
-  const shimmerStyle = useMemo(
+  const spotlight = useMemo(
     () => ({
-      background: `radial-gradient(circle at ${light.x}% ${light.y}%, rgba(229,199,125,0.18), transparent 28%)`,
+      background: `radial-gradient(circle at ${cursor.x}% ${cursor.y}%, rgba(200,169,107,0.22), transparent 25%)`,
     }),
-    [light]
+    [cursor]
   );
 
   return (
     <div
       ref={pageRef}
-      className="relative overflow-hidden bg-[#080808] text-white"
+      className="melt-surface noise-overlay relative overflow-hidden bg-[#FFF8F3] text-[#4A2C2A]"
       onMouseMove={(event) => {
         const rect = event.currentTarget.getBoundingClientRect();
-        setLight({
+        setCursor({
           x: ((event.clientX - rect.left) / rect.width) * 100,
           y: ((event.clientY - rect.top) / rect.height) * 100,
         });
       }}
     >
-      <AnimatePresence>{loading && <LoadingScreen />}</AnimatePresence>
       <motion.div
-        className="fixed left-0 top-0 z-[60] h-1 origin-left bg-gradient-to-r from-[#D4AF37] via-[#fff0b8] to-[#D4AF37]"
+        className="fixed left-0 top-0 z-[70] h-1 origin-left bg-gradient-to-r from-[#DFA8B6] via-[#C8A96B] to-[#4A2C2A]"
         style={{ scaleX: scrollYProgress }}
       />
-      <div className="pointer-events-none fixed inset-0 z-0 opacity-80" style={shimmerStyle} />
-      <FloatingParticles />
-      <HeroSection refProp={heroRef} heroY={heroY} />
+      <div className="pointer-events-none fixed inset-0 z-0 opacity-80" style={spotlight} />
+      <AmbientLightField />
+
+      <HeroSection heroY={heroY} heroOpacity={heroOpacity} />
+      <FeaturedCollections />
       <StorySection />
-      <ProductsSection />
-      <ProcessSection />
-      <GallerySection />
-      <WhyChooseUsSection />
-      <TestimonialsSection
-        activeTestimonial={activeTestimonial}
-        setActiveTestimonial={setActiveTestimonial}
-      />
-      <OccasionsSection />
-      <InstagramSection />
-      <FaqSection />
-      <ContactSection />
-      <StickyWhatsapp />
+      <SignatureProducts active={activeProduct} setActive={setActiveProduct} />
+      <WhyMelt />
+      <CorporateGifting />
+      <CustomerLove active={activeTestimonial} setActive={setActiveTestimonial} />
+      <InstagramExperience />
+      <OrderProcess />
+      <FinalCta />
     </div>
   );
 }
 
-function LoadingScreen() {
+function AmbientLightField() {
   return (
-    <motion.div
-      className="fixed inset-0 z-[100] grid place-items-center bg-[#080808]"
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.7, ease: "easeInOut" }}
-    >
+    <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
       <motion.div
-        initial={{ opacity: 0, y: 18, scale: 0.96 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        className="text-center"
-      >
-        <div className="mx-auto mb-6 grid h-24 w-24 place-items-center overflow-hidden rounded-full border border-[#D4AF37]/40 bg-white shadow-[0_0_60px_rgba(212,175,55,0.22)]">
-          <Image
-            src={logoSrc}
-            alt="Resin Passion logo"
-            width={96}
-            height={96}
-            className="h-full w-full object-cover"
-            priority
-          />
-        </div>
-        <p className="font-display text-3xl italic text-[#E5C77D]">Resin Passion</p>
-        <div className="mx-auto mt-5 h-px w-48 overflow-hidden bg-white/10">
-          <motion.div
-            className="h-full bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent"
-            animate={{ x: ["-100%", "100%"] }}
-            transition={{ repeat: Infinity, duration: 1.1, ease: "linear" }}
-          />
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-function FloatingParticles() {
-  return (
-    <div className="pointer-events-none fixed inset-0 z-10 overflow-hidden">
-      {Array.from({ length: 28 }).map((_, index) => (
-        <motion.span
-          key={index}
-          className="absolute h-1 w-1 rounded-full bg-[#E5C77D]"
-          initial={{
-            x: `${(index * 37) % 100}vw`,
-            y: `${(index * 19) % 100}vh`,
-            opacity: 0.12,
-            scale: 0.8,
-          }}
-          animate={{
-            y: ["0vh", "-12vh", "0vh"],
-            opacity: [0.12, 0.55, 0.12],
-            scale: [0.7, 1.6, 0.7],
-          }}
-          transition={{
-            repeat: Infinity,
-            duration: 5 + (index % 6),
-            delay: index * 0.13,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-    </div>
-  );
-}
-
-function ProductArtwork({
-  kind,
-  label,
-  featured = false,
-}: {
-  kind: ArtworkKind;
-  label: string;
-  featured?: boolean;
-}) {
-  return (
-    <div
-      role="img"
-      aria-label={label}
-      className={cn(
-        "absolute inset-0 overflow-hidden bg-[#0a0a0a]",
-        featured && "rounded-[3rem]"
-      )}
-    >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_28%_22%,rgba(255,255,255,0.14),transparent_24%),radial-gradient(circle_at_78%_18%,rgba(229,199,125,0.22),transparent_28%),linear-gradient(135deg,#050505_0%,#18120a_45%,#060606_100%)]" />
-      <div className="absolute -left-20 top-12 h-56 w-56 rounded-full bg-[#D4AF37]/20 blur-3xl" />
-      <div className="absolute -right-16 bottom-8 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
-
-      {kind === "clock" && (
-        <motion.div
-          className="absolute left-1/2 top-1/2 aspect-square w-[68%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#D4AF37]/45 bg-[radial-gradient(circle_at_35%_28%,rgba(255,255,255,0.95),rgba(239,225,179,0.74)_26%,rgba(69,46,10,0.88)_27%,rgba(12,12,12,0.88)_100%)] shadow-[0_30px_90px_rgba(0,0,0,0.55),inset_0_0_50px_rgba(212,175,55,0.22)]"
-          whileHover={{ scale: 1.04, rotate: 1 }}
-          transition={{ duration: 0.6 }}
-        >
-          <span className="absolute inset-[9%] rounded-full border border-[#E5C77D]/35" />
-          <span className="absolute left-1/2 top-1/2 h-[28%] w-px origin-bottom -translate-x-1/2 -translate-y-full bg-[#E5C77D]" />
-          <span className="absolute left-1/2 top-1/2 h-px w-[24%] origin-left bg-[#E5C77D]" />
-          <span className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#D4AF37]" />
-          {["12", "3", "6", "9"].map((hour, index) => (
-            <span
-              key={hour}
-              className={cn(
-                "absolute font-display text-lg text-[#fff0b8]/85",
-                index === 0 && "left-1/2 top-[9%] -translate-x-1/2",
-                index === 1 && "right-[10%] top-1/2 -translate-y-1/2",
-                index === 2 && "bottom-[7%] left-1/2 -translate-x-1/2",
-                index === 3 && "left-[10%] top-1/2 -translate-y-1/2"
-              )}
-            >
-              {hour}
-            </span>
-          ))}
-        </motion.div>
-      )}
-
-      {kind === "nameplate" && (
-        <motion.div
-          className="absolute left-1/2 top-1/2 w-[76%] -translate-x-1/2 -translate-y-1/2 rounded-[2rem] border border-[#D4AF37]/45 bg-[linear-gradient(135deg,rgba(255,255,255,0.16),rgba(212,175,55,0.20)_36%,rgba(9,9,9,0.94)_100%)] p-8 text-center shadow-[0_30px_90px_rgba(0,0,0,0.55),inset_0_0_45px_rgba(212,175,55,0.18)]"
-          whileHover={{ scale: 1.04, y: -4 }}
-        >
-          <div className="mx-auto mb-5 h-px w-24 bg-gradient-to-r from-transparent via-[#E5C77D] to-transparent" />
-          <p className="font-display text-4xl italic text-[#fff0b8]">The Mehtas</p>
-          <p className="mt-3 text-xs uppercase tracking-[0.32em] text-white/58">
-            Custom Name Plate
-          </p>
-          <div className="mx-auto mt-5 h-px w-24 bg-gradient-to-r from-transparent via-[#E5C77D] to-transparent" />
-        </motion.div>
-      )}
-
-      {kind === "gift" && (
-        <motion.div
-          className="absolute left-1/2 top-1/2 grid h-[62%] w-[62%] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-[2rem] border border-[#D4AF37]/45 bg-[linear-gradient(145deg,rgba(212,175,55,0.88),rgba(111,73,13,0.78)_48%,rgba(15,15,15,0.92)_49%)] shadow-[0_30px_90px_rgba(0,0,0,0.55)]"
-          whileHover={{ scale: 1.04, rotate: -1 }}
-        >
-          <span className="absolute left-1/2 top-0 h-full w-7 -translate-x-1/2 bg-[#fff0b8]/70" />
-          <span className="absolute left-0 top-1/2 h-7 w-full -translate-y-1/2 bg-[#fff0b8]/70" />
-          <span className="relative z-10 rounded-full border border-black/15 bg-black/40 px-5 py-3 font-display text-2xl text-[#fff0b8] backdrop-blur">
-            With Love
-          </span>
-        </motion.div>
-      )}
-
-      {kind === "decor" && (
-        <motion.div
-          className="absolute left-1/2 top-1/2 h-[72%] w-[66%] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[2.2rem] border border-[#D4AF37]/45 bg-[#080808] shadow-[0_30px_90px_rgba(0,0,0,0.55)]"
-          whileHover={{ scale: 1.035 }}
-        >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_28%,rgba(255,255,255,0.82),transparent_12%),radial-gradient(circle_at_64%_42%,rgba(229,199,125,0.78),transparent_16%),radial-gradient(circle_at_42%_68%,rgba(212,175,55,0.52),transparent_18%),linear-gradient(135deg,#050505,#2b210f_48%,#070707)]" />
-          <div className="absolute inset-x-[-20%] top-1/2 h-10 -rotate-12 bg-[#fff0b8]/40 blur-sm" />
-          <div className="absolute bottom-6 left-6 right-6 h-px bg-gradient-to-r from-transparent via-[#E5C77D] to-transparent" />
-        </motion.div>
-      )}
-
-      <div className="absolute inset-0 bg-[linear-gradient(120deg,transparent,rgba(255,255,255,0.08),transparent)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+        className="absolute -left-28 top-20 h-80 w-80 rounded-full bg-[#F5D8E2]/60 blur-3xl"
+        animate={{ x: [0, 54, 0], y: [0, -32, 0], opacity: [0.45, 0.72, 0.45] }}
+        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute right-0 top-1/3 h-96 w-96 rounded-full bg-[#C8A96B]/24 blur-3xl"
+        animate={{ x: [0, -48, 0], y: [0, 36, 0], opacity: [0.28, 0.58, 0.28] }}
+        transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute bottom-0 left-1/3 h-[32rem] w-[32rem] rounded-full bg-[#DFA8B6]/28 blur-3xl"
+        animate={{ scale: [1, 1.12, 1], opacity: [0.25, 0.42, 0.25] }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+      />
     </div>
   );
 }
 
 function HeroSection({
-  refProp,
   heroY,
+  heroOpacity,
 }: {
-  refProp: RefObject<HTMLElement | null>;
   heroY: MotionValue<number>;
+  heroOpacity: MotionValue<number>;
 }) {
   return (
-    <section
-      ref={refProp}
-      id="home"
-      className="relative min-h-screen overflow-hidden px-5 pb-16 pt-32 md:px-8 lg:px-12 lg:pt-36"
-    >
-      <motion.div className="absolute inset-0 z-0" style={{ y: heroY }}>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_74%_30%,rgba(229,199,125,0.22),transparent_28%),radial-gradient(circle_at_20%_14%,rgba(255,255,255,0.09),transparent_26%),linear-gradient(90deg,#080808_0%,rgba(8,8,8,0.82)_48%,rgba(8,8,8,0.42)_100%),linear-gradient(180deg,rgba(8,8,8,0.10)_0%,#080808_94%)]" />
-        <div className="absolute right-[-12%] top-24 hidden h-[720px] w-[720px] opacity-80 lg:block">
-          <ProductArtwork kind="clock" label="Resin Passion luxury resin wall clock" featured />
-        </div>
+    <section className="relative z-10 min-h-screen overflow-hidden px-5 pb-16 pt-28 md:px-8 lg:px-12">
+      <motion.div className="absolute inset-0 z-0" style={{ y: heroY, opacity: heroOpacity }}>
+        <Image src={heroImage} alt="Luxury cookies styled on a warm bakery table" fill priority sizes="100vw" className="object-cover" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,248,243,0.96)_0%,rgba(255,248,243,0.78)_42%,rgba(255,248,243,0.18)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_30%,rgba(245,216,226,0.62),transparent_36%)]" />
       </motion.div>
-      <div className="relative z-20 mx-auto flex min-h-[calc(100vh-8rem)] max-w-7xl flex-col justify-center">
+
+      <FloatingCookie className="left-[7%] top-[22%]" delay={0} />
+      <FloatingCookie className="right-[10%] top-[18%] hidden md:block" delay={1.2} />
+      <FloatingCookie className="bottom-[16%] right-[33%] hidden lg:block" delay={2.1} />
+
+      <div className="relative z-10 mx-auto grid min-h-[calc(100vh-7rem)] max-w-7xl items-center gap-12 lg:grid-cols-[1.02fr_0.98fr]">
+        <div className="max-w-4xl">
+          <motion.div
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            className="inline-flex items-center gap-3 rounded-full border border-[#C8A96B]/30 bg-white/45 px-4 py-2 text-xs font-bold uppercase tracking-[0.34em] text-[#4A2C2A]/75 shadow-sm backdrop-blur-xl"
+          >
+            <Sparkles className="h-4 w-4 text-[#C8A96B]" />
+            Lower Parel, Mumbai
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 34, filter: "blur(16px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{ delay: 0.12, duration: 1.05, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-8 max-w-5xl font-display text-[clamp(4rem,12vw,10.5rem)] leading-[0.82] tracking-[-0.075em] text-[#4A2C2A]"
+          >
+            Eggless Desserts That Melt In Your Mouth
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.28, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-8 max-w-2xl text-lg leading-8 text-[#4A2C2A]/72 md:text-xl"
+          >
+            Thoughtfully baked in Mumbai using premium ingredients, handcrafted recipes, and gift-ready packaging
+            designed to make every box feel like a love letter.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.42, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-10 flex flex-col gap-4 sm:flex-row"
+          >
+            <MagneticButton href={instagramUrl} external>
+              Order Now <Send className="h-4 w-4" />
+            </MagneticButton>
+            <MagneticButton href="#collections" variant="outline">
+              Explore Collection <ArrowRight className="h-4 w-4" />
+            </MagneticButton>
+          </motion.div>
+
+          <div className="mt-12 grid max-w-2xl grid-cols-3 gap-3 text-sm text-[#4A2C2A]/68">
+            {["100% Eggless", "Small Batch", "Luxury Gifting"].map((item) => (
+              <div key={item} className="rounded-3xl border border-[#4A2C2A]/10 bg-white/42 p-4 shadow-sm backdrop-blur-xl">
+                <Star className="mb-3 h-4 w-4 fill-[#C8A96B] text-[#C8A96B]" />
+                {item}
+              </div>
+            ))}
+          </div>
+        </div>
+
         <motion.div
-          initial={{ opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="max-w-5xl"
+          initial={{ opacity: 0, scale: 0.92, y: 40 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ delay: 0.32, duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          className="relative min-h-[34rem]"
         >
-          <div className="mb-7 inline-flex items-center gap-3 rounded-full border border-[#D4AF37]/25 bg-white/[0.06] px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-[#E5C77D] backdrop-blur-xl">
-            <span className="h-2 w-2 rounded-full bg-[#D4AF37] shadow-[0_0_20px_rgba(212,175,55,0.9)]" />
-            Handmade in Mumbai
+          <div className="absolute inset-0 rounded-[3.5rem] bg-gradient-to-br from-[#F5D8E2]/72 via-white/30 to-[#C8A96B]/22 shadow-[0_45px_120px_rgba(74,44,42,0.18)] backdrop-blur-2xl" />
+          <div className="absolute inset-3 overflow-hidden rounded-[3.1rem]">
+            <Image
+              src="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=1300&q=88"
+              alt="Molten stuffed cookies arranged in a premium dessert box"
+              fill
+              priority
+              sizes="(min-width: 1024px) 48vw, 100vw"
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#4A2C2A]/68 via-[#4A2C2A]/10 to-transparent" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_28%_18%,rgba(245,216,226,0.42),transparent_34%)]" />
           </div>
-          <h1 className="text-balance font-display text-6xl leading-[0.88] tracking-[-0.055em] text-white md:text-8xl lg:text-[8.5rem]">
-            Every Memory Deserves Resin Passion
-          </h1>
-          <p className="mt-7 max-w-2xl text-lg leading-8 text-white/72 md:text-xl">
-            Handcrafted resin clocks, personalized name plates, and luxury gifts
-            designed to celebrate life&apos;s most meaningful moments.
-          </p>
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-            <MagneticButton href="#contact" variant="gold">
-              Customize Your Piece
-              <ArrowRight className="h-4 w-4" />
-            </MagneticButton>
-            <MagneticButton href="#collection" variant="glass">
-              <Play className="h-4 w-4" />
-              Explore Collection
-            </MagneticButton>
-          </div>
-          <div className="mt-10 grid max-w-3xl gap-3 text-sm text-white/62 sm:grid-cols-3">
-            {["Custom orders", "Premium materials", "WhatsApp consultation"].map(
-              (item) => (
-                <div key={item} className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-[#E5C77D]" />
-                  <span>{item}</span>
-                </div>
-              )
-            )}
+          <div className="absolute bottom-6 left-6 right-6 rounded-[2rem] border border-white/50 bg-white/55 p-5 shadow-xl backdrop-blur-2xl">
+            <p className="text-xs uppercase tracking-[0.32em] text-[#4A2C2A]/50">Today&apos;s signature</p>
+            <p className="mt-2 font-display text-3xl tracking-[-0.04em]">Molten cookie boxes, baked to order.</p>
           </div>
         </motion.div>
       </div>
-      <div className="absolute bottom-8 left-1/2 z-20 hidden -translate-x-1/2 text-center text-xs uppercase tracking-[0.4em] text-white/45 md:block">
-        <span>Scroll</span>
-        <motion.div
-          className="mx-auto mt-3 h-12 w-px bg-gradient-to-b from-[#E5C77D] to-transparent"
-          animate={{ scaleY: [0.45, 1, 0.45], opacity: [0.35, 1, 0.35] }}
-          transition={{ repeat: Infinity, duration: 1.8 }}
+    </section>
+  );
+}
+
+function FeaturedCollections() {
+  return (
+    <section id="collections" className="relative z-10 px-5 py-24 md:px-8 lg:px-12 lg:py-32">
+      <div className="mx-auto max-w-7xl">
+        <SectionIntro
+          eyebrow="Featured collections"
+          title="A dessert wardrobe for every kind of craving."
+          copy="Editorial, indulgent, and designed to convert impulse into an order. Each collection is built for taste, texture, and the moment it is unboxed."
         />
+        <div className="mt-14 grid gap-5 md:grid-cols-2">
+          {collections.map((collection, index) => (
+            <motion.a
+              key={collection.title}
+              href={instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-reveal
+              className={cn(
+                "group relative min-h-[30rem] overflow-hidden rounded-[2.75rem] bg-[#4A2C2A] p-6 text-white shadow-[0_28px_80px_rgba(74,44,42,0.14)]",
+                index === 0 && "md:row-span-2 md:min-h-[42rem]"
+              )}
+              whileHover={{ y: -8 }}
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <Image src={collection.image} alt={collection.title} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />
+              <div className={cn("absolute inset-0 bg-gradient-to-t", collection.accent)} />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#2B1716]/80 via-[#2B1716]/16 to-transparent" />
+              <div className="relative z-10 flex h-full flex-col justify-between">
+                <span className="w-fit rounded-full border border-white/30 bg-white/15 px-4 py-2 text-xs uppercase tracking-[0.28em] backdrop-blur-xl">
+                  0{index + 1}
+                </span>
+                <div>
+                  <h3 className="font-display text-5xl tracking-[-0.055em] md:text-6xl">{collection.title}</h3>
+                  <p className="mt-4 max-w-md text-base leading-7 text-white/78">{collection.copy}</p>
+                  <span className="mt-7 inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-bold text-[#4A2C2A] transition group-hover:bg-[#F5D8E2]">
+                    Order this collection <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                  </span>
+                </div>
+              </div>
+            </motion.a>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -525,120 +405,35 @@ function HeroSection({
 
 function StorySection() {
   return (
-    <section id="story" className="relative px-5 py-24 md:px-8 lg:px-12 lg:py-32">
-      <div className="mx-auto max-w-7xl">
-        <SectionIntro
-          eyebrow="The atelier"
-          title="Crafted By Hand. Made With Heart."
-          description="Each creation begins as a conversation: a home, a celebration, a name, a date, a feeling. Then it is poured, layered, cured, finished, and polished until the memory feels permanent."
-        />
-        <div className="mt-16 grid gap-8 lg:grid-cols-3">
-          {[
-            ["The idea", "We translate your story into colors, materials, initials, textures, florals, and gold accents."],
-            ["The making", "Every piece is poured slowly, watched carefully, and finished by hand for depth and shine."],
-            ["The reveal", "The final artwork arrives ready to gift, style, and keep as an heirloom-worthy object."],
-          ].map(([title, copy], index) => (
-            <article
+    <section id="story" className="relative z-10 overflow-hidden bg-[#4A2C2A] px-5 py-24 text-[#FFF8F3] md:px-8 lg:px-12 lg:py-32">
+      <div className="absolute left-0 top-0 h-full w-full bg-[radial-gradient(circle_at_18%_12%,rgba(245,216,226,0.20),transparent_32%),radial-gradient(circle_at_82%_78%,rgba(200,169,107,0.18),transparent_30%)]" />
+      <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.9fr_1.1fr]">
+        <div data-reveal>
+          <SectionKicker>Our story</SectionKicker>
+          <h2 className="mt-6 font-display text-6xl leading-[0.9] tracking-[-0.06em] md:text-8xl">
+            Born from the pause before the first bite.
+          </h2>
+          <p className="mt-8 max-w-xl text-lg leading-8 text-[#FFF8F3]/70">
+            MELT BOMBAY is a founder-led dessert atelier in Lower Parel, created for people who believe a dessert
+            box should feel as considered as perfume, jewellery, or flowers.
+          </p>
+          <MagneticButton href={instagramUrl} external className="mt-9 bg-[#F5D8E2] text-[#4A2C2A] hover:bg-white">
+            Meet us on Instagram <Instagram className="h-4 w-4" />
+          </MagneticButton>
+        </div>
+        <div className="grid gap-5">
+          {storyMoments.map(([step, title, copy], index) => (
+            <div
               key={title}
               data-reveal
-              className={cn(
-                "group relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.04] p-5",
-                index === 1 && "lg:mt-16"
-              )}
+              className="group grid gap-5 rounded-[2.5rem] border border-white/10 bg-white/[0.06] p-6 shadow-[0_20px_70px_rgba(0,0,0,0.18)] backdrop-blur-xl md:grid-cols-[8rem_1fr]"
             >
-              <div className="relative h-80 overflow-hidden rounded-[2rem]">
-                <ProductArtwork
-                  kind={(["nameplate", "decor", "gift"] as ArtworkKind[])[index]}
-                  label={`${title} resin art process`}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
+              <span className="font-display text-6xl italic tracking-[-0.08em] text-[#C8A96B]">{step}</span>
+              <div>
+                <p className="text-xs uppercase tracking-[0.34em] text-[#F5D8E2]/70">Chapter {index + 1}</p>
+                <h3 className="mt-3 font-display text-4xl tracking-[-0.05em]">{title}</h3>
+                <p className="mt-3 leading-7 text-[#FFF8F3]/64">{copy}</p>
               </div>
-              <div className="p-3 pt-6">
-                <span className="text-xs uppercase tracking-[0.32em] text-[#D4AF37]">
-                  0{index + 1}
-                </span>
-                <h3 className="mt-3 font-display text-3xl text-white">{title}</h3>
-                <p className="mt-3 leading-7 text-white/62">{copy}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function ProductsSection() {
-  return (
-    <section id="collection" className="relative bg-[#0d0d0d] px-5 py-24 md:px-8 lg:px-12 lg:py-32">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#D4AF37]/50 to-transparent" />
-      <div className="mx-auto max-w-7xl">
-        <SectionIntro
-          eyebrow="Featured products"
-          title="These are not products. These are handcrafted memories."
-          description="Explore custom pieces made for homes, couples, gifting moments, and luxury interiors."
-        />
-        <div className="mt-14 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {products.map((product) => (
-            <article
-              key={product.title}
-              data-reveal
-              className="group relative overflow-hidden rounded-[2.25rem] border border-white/10 bg-[#111111] p-3 transition duration-500 hover:-translate-y-2 hover:border-[#D4AF37]/60 hover:shadow-[0_24px_80px_rgba(212,175,55,0.14)]"
-            >
-              <div className="absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100">
-                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#E5C77D] to-transparent" />
-              </div>
-              <div className="relative h-72 overflow-hidden rounded-[1.75rem]">
-                <ProductArtwork kind={product.artwork} label={product.title} />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
-              </div>
-              <div className="p-4">
-                <h3 className="font-display text-2xl text-white">{product.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-white/58">{product.copy}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function ProcessSection() {
-  return (
-    <section id="process" className="px-5 py-24 md:px-8 lg:px-12 lg:py-32">
-      <div className="mx-auto max-w-7xl">
-        <SectionIntro
-          eyebrow="Commission journey"
-          title="A refined process for a personal work of art."
-          description="From first WhatsApp message to final delivery, the experience is designed to feel clear, premium, and deeply personal."
-        />
-        <div className="relative mt-16 grid gap-5 lg:grid-cols-5">
-          <div className="absolute left-0 top-12 hidden h-px w-full bg-white/10 lg:block" />
-          <motion.div
-            className="absolute left-0 top-12 hidden h-px bg-gradient-to-r from-[#D4AF37] to-transparent lg:block"
-            initial={{ width: 0 }}
-            whileInView={{ width: "100%" }}
-            viewport={{ once: true, amount: 0.45 }}
-            transition={{ duration: 1.6, ease: "easeOut" }}
-          />
-          {processSteps.map((step, index) => (
-            <div
-              key={step}
-              data-reveal
-              className="relative rounded-[2rem] border border-white/10 bg-white/[0.045] p-6 backdrop-blur"
-            >
-              <span className="relative z-10 grid h-12 w-12 place-items-center rounded-full border border-[#D4AF37]/40 bg-[#0d0d0d] font-display text-xl text-[#E5C77D]">
-                {index + 1}
-              </span>
-              <h3 className="mt-8 text-xl font-semibold text-white">{step}</h3>
-              <p className="mt-3 text-sm leading-6 text-white/55">
-                {index === 0 && "Send references, size, occasion, name/date, and color direction."}
-                {index === 1 && "Receive guidance on styling, materials, budget, and feasibility."}
-                {index === 2 && "Your piece is layered, cured, detailed, and polished by hand."}
-                {index === 3 && "Finish, shine, edges, personalization, and packaging are checked."}
-                {index === 4 && "Delivered carefully so the unboxing feels as special as the piece."}
-              </p>
             </div>
           ))}
         </div>
@@ -647,193 +442,184 @@ function ProcessSection() {
   );
 }
 
-function GallerySection() {
-  const [activeGallery, setActiveGallery] = useState<number | null>(null);
-
-  return (
-    <section id="gallery" className="bg-[#0b0b0b] px-5 py-24 md:px-8 lg:px-12 lg:py-32">
-      <div className="mx-auto max-w-7xl">
-        <SectionIntro
-          eyebrow="Gallery"
-          title="Editorial details, luminous finishes, and pieces made to be remembered."
-          description="A visual moodboard for clocks, name plates, keepsakes, and luxury resin decor."
-        />
-        <div className="mt-14 grid auto-rows-[260px] gap-5 md:grid-cols-3">
-          {galleryImages.map((image, index) => (
-            <button
-              key={image.title}
-              type="button"
-              data-reveal
-              onClick={() => setActiveGallery(index)}
-              className={cn(
-                "group relative overflow-hidden rounded-[2rem] border border-white/10 text-left",
-                image.span
-              )}
-            >
-              <ProductArtwork kind={image.artwork} label={image.title} />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/5 to-transparent opacity-80 transition group-hover:opacity-100" />
-              <div className="absolute bottom-5 left-5 right-5 translate-y-3 opacity-0 transition duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                <span className="rounded-full border border-[#D4AF37]/40 bg-black/35 px-3 py-1 text-xs uppercase tracking-[0.22em] text-[#E5C77D] backdrop-blur">
-                  View detail
-                </span>
-                <p className="mt-3 font-display text-2xl text-white">{image.title}</p>
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-      <AnimatePresence>
-        {activeGallery !== null && (
-          <motion.button
-            type="button"
-            className="fixed inset-0 z-[90] grid cursor-zoom-out place-items-center bg-black/88 p-5 backdrop-blur-xl"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setActiveGallery(null)}
-            aria-label="Close gallery image"
-          >
-            <motion.div
-              className="relative h-[78vh] w-full max-w-5xl overflow-hidden rounded-[2rem] border border-white/10"
-              initial={{ scale: 0.92, y: 30 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.92, y: 30 }}
-            >
-              <ProductArtwork
-                kind={galleryImages[activeGallery].artwork}
-                label={galleryImages[activeGallery].title}
-                featured
-              />
-            </motion.div>
-          </motion.button>
-        )}
-      </AnimatePresence>
-    </section>
-  );
-}
-
-function WhyChooseUsSection() {
-  return (
-    <section className="px-5 py-24 md:px-8 lg:px-12 lg:py-32">
-      <div className="mx-auto max-w-7xl">
-        <SectionIntro
-          eyebrow="Why choose us"
-          title="A premium gifting experience from concept to creation."
-          description="Luxury comes from restraint, patience, quality, and emotional precision."
-        />
-        <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {reasons.map(([title, copy, Icon]) => (
-            <article
-              key={title as string}
-              data-reveal
-              className="group rounded-[2rem] border border-white/10 bg-white/[0.045] p-7 transition duration-500 hover:border-[#D4AF37]/50 hover:bg-[#D4AF37]/[0.06]"
-            >
-              <div className="grid h-12 w-12 place-items-center rounded-2xl bg-[#D4AF37]/10 text-[#E5C77D] ring-1 ring-[#D4AF37]/20 transition group-hover:scale-110">
-                <Icon className="h-5 w-5" />
-              </div>
-              <h3 className="mt-6 text-xl font-semibold text-white">{title}</h3>
-              <p className="mt-3 leading-7 text-white/58">{copy}</p>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function TestimonialsSection({
-  activeTestimonial,
-  setActiveTestimonial,
+function SignatureProducts({
+  active,
+  setActive,
 }: {
-  activeTestimonial: number;
-  setActiveTestimonial: (index: number) => void;
+  active: number;
+  setActive: (index: number) => void;
 }) {
-  const testimonial = testimonials[activeTestimonial];
-
   return (
-    <section id="testimonials" className="relative overflow-hidden bg-[#101010] px-5 py-24 md:px-8 lg:px-12 lg:py-32">
-      <div className="absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-[#D4AF37]/10 blur-3xl" />
-      <div className="relative mx-auto max-w-5xl text-center">
+    <section id="signature" className="relative z-10 px-5 py-24 md:px-8 lg:px-12 lg:py-32">
+      <div className="mx-auto max-w-7xl">
         <SectionIntro
-          eyebrow="Client words"
-          title="Proof that personal can still feel premium."
-          description="Custom orders made for people who care about meaning, finish, and a memorable reveal."
+          eyebrow="Signature products"
+          title="Built like objects of desire. Baked like comfort."
+          copy="A product gallery that gives shoppers the confidence to DM, enquire, and order without needing a conventional catalogue."
         />
-        <div data-reveal className="mt-14 rounded-[2.5rem] border border-white/10 bg-white/[0.06] p-7 shadow-2xl backdrop-blur-xl md:p-10">
-          <div className="mx-auto mb-7 flex w-fit gap-1 text-[#E5C77D]">
-            {Array.from({ length: 5 }).map((_, index) => (
-              <Star key={index} className="h-5 w-5 fill-current" />
+        <div className="mt-14 grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+          <div data-image-reveal className="relative min-h-[42rem] overflow-hidden rounded-[3rem] bg-[#F5D8E2] shadow-[0_35px_90px_rgba(74,44,42,0.16)]">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={signatureProducts[active].name}
+                initial={{ opacity: 0, scale: 1.06 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                className="absolute inset-0"
+              >
+                <Image src={signatureProducts[active].image} alt={signatureProducts[active].name} fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#4A2C2A]/72 via-transparent to-transparent" />
+              </motion.div>
+            </AnimatePresence>
+            <div className="absolute bottom-7 left-7 right-7 rounded-[2rem] border border-white/45 bg-white/55 p-6 text-[#4A2C2A] backdrop-blur-2xl">
+              <p className="text-xs uppercase tracking-[0.34em] text-[#4A2C2A]/52">Quick view</p>
+              <h3 className="mt-3 font-display text-4xl tracking-[-0.05em]">{signatureProducts[active].name}</h3>
+              <p className="mt-3 leading-7 text-[#4A2C2A]/68">{signatureProducts[active].note}</p>
+            </div>
+          </div>
+          <div className="grid content-center gap-4">
+            {signatureProducts.map((product, index) => (
+              <button
+                key={product.name}
+                type="button"
+                data-reveal
+                onMouseEnter={() => setActive(index)}
+                onFocus={() => setActive(index)}
+                className={cn(
+                  "group rounded-[2rem] border p-5 text-left transition duration-500",
+                  active === index
+                    ? "border-[#C8A96B]/55 bg-[#4A2C2A] text-[#FFF8F3] shadow-[0_24px_70px_rgba(74,44,42,0.16)]"
+                    : "border-[#4A2C2A]/10 bg-white/50 text-[#4A2C2A] hover:border-[#DFA8B6]"
+                )}
+              >
+                <div className="flex items-start justify-between gap-5">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.32em] opacity-55">0{index + 1}</p>
+                    <h3 className="mt-3 font-display text-4xl tracking-[-0.05em]">{product.name}</h3>
+                    <p className="mt-2 max-w-xl leading-7 opacity-68">{product.note}</p>
+                  </div>
+                  <span className="shrink-0 rounded-full bg-[#F5D8E2] px-4 py-2 text-sm font-bold text-[#4A2C2A]">
+                    {product.price}
+                  </span>
+                </div>
+              </button>
             ))}
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function WhyMelt() {
+  return (
+    <section id="why" className="relative z-10 px-5 py-24 md:px-8 lg:px-12 lg:py-32">
+      <div className="mx-auto max-w-7xl rounded-[3.25rem] border border-[#4A2C2A]/10 bg-white/42 p-6 shadow-[0_30px_100px_rgba(74,44,42,0.10)] backdrop-blur-2xl md:p-10">
+        <SectionIntro
+          eyebrow="Why Melt"
+          title="The trust signals that make premium feel easy to buy."
+          copy="Every reason to order is embedded into the experience: ingredients, craft, freshness, packaging, and the comfort of an eggless promise."
+        />
+        <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {reasons.map(([title, copy, Icon]) => (
+            <motion.div
+              key={title}
+              data-reveal
+              whileHover={{ y: -8, rotate: -0.35 }}
+              className="group rounded-[2.25rem] border border-[#4A2C2A]/10 bg-[#FFF8F3]/72 p-6 transition hover:border-[#C8A96B]/50"
+            >
+              <div className="grid h-14 w-14 place-items-center rounded-2xl bg-[#F5D8E2] text-[#4A2C2A] shadow-[0_16px_35px_rgba(223,168,182,0.35)]">
+                <Icon className="h-6 w-6" />
+              </div>
+              <h3 className="mt-7 font-display text-3xl tracking-[-0.045em]">{title}</h3>
+              <p className="mt-3 leading-7 text-[#4A2C2A]/66">{copy}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CorporateGifting() {
+  return (
+    <section id="gifting" className="relative z-10 overflow-hidden bg-[#F5D8E2] px-5 py-24 md:px-8 lg:px-12 lg:py-32">
+      <div className="absolute right-[-8rem] top-[-8rem] h-96 w-96 rounded-full bg-[#C8A96B]/35 blur-3xl" />
+      <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1fr_0.95fr]">
+        <div data-reveal>
+          <SectionKicker>Corporate gifting</SectionKicker>
+          <h2 className="mt-6 font-display text-6xl leading-[0.9] tracking-[-0.06em] md:text-8xl">
+            Gifts that feel personal at enterprise scale.
+          </h2>
+          <p className="mt-8 max-w-2xl text-lg leading-8 text-[#4A2C2A]/72">
+            From launch hampers and wedding favours to festive client boxes, MELT BOMBAY builds dessert gifting
+            experiences for companies, events, founders, and celebrations.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            {["Corporate Gifts", "Events", "Weddings", "Celebrations"].map((item) => (
+              <span key={item} className="rounded-full border border-[#4A2C2A]/12 bg-white/45 px-5 py-3 text-sm font-bold text-[#4A2C2A]/72 backdrop-blur">
+                {item}
+              </span>
+            ))}
+          </div>
+          <MagneticButton href={instagramUrl} external className="mt-10">
+            Enquire for gifting <Building2 className="h-4 w-4" />
+          </MagneticButton>
+        </div>
+        <div data-image-reveal className="relative min-h-[38rem] overflow-hidden rounded-[3rem] shadow-[0_35px_100px_rgba(74,44,42,0.22)]">
+          <Image src="https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=1300&q=88" alt="Premium pink gift boxes and ribbons" fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#4A2C2A]/72 via-transparent to-transparent" />
+          <div className="absolute bottom-7 left-7 right-7 rounded-[2rem] bg-white/62 p-6 backdrop-blur-2xl">
+            <Gift className="h-8 w-8 text-[#C8A96B]" />
+            <p className="mt-5 font-display text-4xl tracking-[-0.055em]">Custom notes, ribbons, tins, sleeves, and delivery coordination.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CustomerLove({
+  active,
+  setActive,
+}: {
+  active: number;
+  setActive: (index: number) => void;
+}) {
+  return (
+    <section id="love" className="relative z-10 bg-[#4A2C2A] px-5 py-24 text-[#FFF8F3] md:px-8 lg:px-12 lg:py-32">
+      <div className="mx-auto max-w-6xl text-center">
+        <SectionKicker>Customer love</SectionKicker>
+        <div className="relative mx-auto mt-10 min-h-[24rem] max-w-5xl">
           <AnimatePresence mode="wait">
             <motion.figure
-              key={testimonial.name}
-              initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
+              key={testimonials[active].name}
+              initial={{ opacity: 0, y: 28, filter: "blur(14px)" }}
               animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              exit={{ opacity: 0, y: -20, filter: "blur(10px)" }}
-              transition={{ duration: 0.55 }}
+              exit={{ opacity: 0, y: -20, filter: "blur(14px)" }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              className="rounded-[3rem] border border-white/10 bg-white/[0.06] p-8 shadow-[0_35px_100px_rgba(0,0,0,0.24)] backdrop-blur-2xl md:p-14"
             >
-              <blockquote className="mx-auto max-w-3xl font-display text-3xl leading-tight text-white md:text-5xl">
-                “{testimonial.quote}”
+              <Quote className="mx-auto h-10 w-10 text-[#C8A96B]" />
+              <blockquote className="mt-8 font-display text-4xl leading-[1.02] tracking-[-0.055em] md:text-7xl">
+                “{testimonials[active].quote}”
               </blockquote>
-              <figcaption className="mt-8 flex items-center justify-center gap-4">
-                <Image
-                  src={testimonial.image}
-                  alt={testimonial.name}
-                  width={64}
-                  height={64}
-                  className="h-16 w-16 rounded-full object-cover ring-2 ring-[#D4AF37]/30"
-                />
-                <div className="text-left">
-                  <p className="font-semibold text-white">{testimonial.name}</p>
-                  <p className="text-sm text-white/50">{testimonial.role}</p>
-                </div>
+              <figcaption className="mt-8 text-[#FFF8F3]/62">
+                <span className="font-bold text-[#FFF8F3]">{testimonials[active].name}</span> · {testimonials[active].role}
               </figcaption>
             </motion.figure>
           </AnimatePresence>
-          <div className="mt-8 flex justify-center gap-2">
-            {testimonials.map((item, index) => (
-              <button
-                key={item.name}
-                type="button"
-                onClick={() => setActiveTestimonial(index)}
-                className={cn(
-                  "h-2.5 rounded-full transition-all",
-                  activeTestimonial === index ? "w-9 bg-[#D4AF37]" : "w-2.5 bg-white/20"
-                )}
-                aria-label={`Show testimonial ${index + 1}`}
-              />
-            ))}
-          </div>
         </div>
-      </div>
-    </section>
-  );
-}
-
-function OccasionsSection() {
-  return (
-    <section id="occasions" className="px-5 py-24 md:px-8 lg:px-12 lg:py-32">
-      <div className="mx-auto max-w-7xl">
-        <SectionIntro
-          eyebrow="Perfect for"
-          title="When the occasion deserves more than a standard gift."
-          description="Each piece is designed to carry the emotion of a milestone into a home."
-        />
-        <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {occasions.map(([title, Icon]) => (
-            <div
-              key={title as string}
-              data-reveal
-              className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.025] p-7"
-            >
-              <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-[#D4AF37]/10 blur-2xl transition group-hover:bg-[#D4AF37]/20" />
-              <Icon className="h-8 w-8 text-[#E5C77D]" />
-              <h3 className="mt-8 font-display text-3xl text-white">{title}</h3>
-              <p className="mt-3 text-sm leading-6 text-white/55">
-                Personalized resin art made to feel intimate, polished, and unforgettable.
-              </p>
-            </div>
+        <div className="mt-6 flex justify-center gap-3">
+          {testimonials.map((item, index) => (
+            <button
+              key={item.name}
+              type="button"
+              aria-label={`Show testimonial ${index + 1}`}
+              onClick={() => setActive(index)}
+              className={cn("h-2.5 rounded-full transition-all", active === index ? "w-10 bg-[#F5D8E2]" : "w-2.5 bg-white/24")}
+            />
           ))}
         </div>
       </div>
@@ -841,44 +627,40 @@ function OccasionsSection() {
   );
 }
 
-function InstagramSection() {
+function InstagramExperience() {
   return (
-    <section className="bg-[#0b0b0b] px-5 py-24 md:px-8 lg:px-12 lg:py-32">
+    <section id="instagram" className="relative z-10 px-5 py-24 md:px-8 lg:px-12 lg:py-32">
       <div className="mx-auto max-w-7xl">
-        <div className="grid items-end gap-8 lg:grid-cols-[1fr_auto]">
+        <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
           <SectionIntro
-            align="left"
-            eyebrow="Instagram"
-            title="Follow the latest pours, reveals, and behind-the-scenes craft."
-            description="Connected to the Resin Passion Instagram presence for high-intent visitors coming from social."
+            eyebrow="Instagram experience"
+            title="A feed made for cravings, screenshots, and DMs."
+            copy="Masonry-style moments bring social proof into the site while keeping the brand world tactile and warm."
           />
-          <MagneticButton href={instagramUrl} external variant="glass">
-            <Instagram className="h-4 w-4" />
-            Open Instagram
+          <MagneticButton href={instagramUrl} external variant="outline">
+            Follow @melt.bombay <Instagram className="h-4 w-4" />
           </MagneticButton>
         </div>
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {instagramPosts.map((post, index) => (
-            <a
-              key={post}
+        <div className="mt-14 columns-1 gap-5 sm:columns-2 lg:columns-3">
+          {socialPosts.map((image, index) => (
+            <motion.a
+              key={image}
               href={instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
               data-reveal
-              className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04]"
+              whileHover={{ y: -8 }}
+              className={cn(
+                "group relative mb-5 block overflow-hidden rounded-[2.5rem] bg-[#F5D8E2] shadow-[0_22px_70px_rgba(74,44,42,0.12)]",
+                index % 3 === 1 ? "h-[31rem]" : "h-[24rem]"
+              )}
             >
-              <div className="relative aspect-[4/5]">
-                <ProductArtwork
-                  kind={galleryImages[index % galleryImages.length].artwork}
-                  label={post}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-              </div>
-              <div className="absolute bottom-5 left-5 right-5">
-                <p className="font-semibold text-white">{post}</p>
-                <p className="mt-1 text-sm text-white/50">@resinpassion2026</p>
-              </div>
-            </a>
+              <Image src={image} alt="MELT BOMBAY Instagram dessert moment" fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-[#4A2C2A]/0 transition group-hover:bg-[#4A2C2A]/30" />
+              <span className="absolute bottom-5 left-5 inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 text-sm font-bold text-[#4A2C2A] opacity-0 backdrop-blur-xl transition group-hover:opacity-100">
+                View post <ArrowRight className="h-4 w-4" />
+              </span>
+            </motion.a>
           ))}
         </div>
       </div>
@@ -886,50 +668,27 @@ function InstagramSection() {
   );
 }
 
-function FaqSection() {
-  const [open, setOpen] = useState(0);
-
+function OrderProcess() {
   return (
-    <section id="faq" className="px-5 py-24 md:px-8 lg:px-12 lg:py-32">
-      <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+    <section id="process" className="relative z-10 px-5 py-24 md:px-8 lg:px-12 lg:py-32">
+      <div className="mx-auto max-w-7xl">
         <SectionIntro
-          align="left"
-          eyebrow="FAQ"
-          title="Everything you need to know before commissioning."
-          description="Clear answers for custom resin clocks, name plates, gifting timelines, and ordering."
+          eyebrow="Order process"
+          title="From craving to doorstep, beautifully choreographed."
+          copy="A simple ordering rhythm that keeps the craft visible and the next step obvious."
         />
-        <div className="space-y-4">
-          {faqs.map((faq, index) => (
-            <div
-              key={faq.q}
-              data-reveal
-              className="rounded-[1.5rem] border border-white/10 bg-white/[0.045]"
-            >
-              <button
-                type="button"
-                onClick={() => setOpen(open === index ? -1 : index)}
-                className="flex w-full items-center justify-between gap-5 px-6 py-5 text-left"
-              >
-                <span className="font-semibold text-white">{faq.q}</span>
-                <ChevronDown
-                  className={cn(
-                    "h-5 w-5 shrink-0 text-[#E5C77D] transition",
-                    open === index && "rotate-180"
-                  )}
-                />
-              </button>
-              <AnimatePresence initial={false}>
-                {open === index && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    className="overflow-hidden"
-                  >
-                    <p className="px-6 pb-6 leading-7 text-white/58">{faq.a}</p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+        <div className="mt-16 grid gap-4 md:grid-cols-5">
+          {process.map((step, index) => (
+            <div key={step} data-reveal className="relative rounded-[2rem] border border-[#4A2C2A]/10 bg-white/52 p-5 shadow-sm backdrop-blur">
+              <span className="font-display text-5xl italic tracking-[-0.08em] text-[#DFA8B6]">0{index + 1}</span>
+              <h3 className="mt-8 font-display text-3xl tracking-[-0.05em]">{step}</h3>
+              <p className="mt-3 text-sm leading-6 text-[#4A2C2A]/62">
+                {index === 0 && "Pick a collection, box, or gifting format."}
+                {index === 1 && "DM the team and confirm details."}
+                {index === 2 && "Your desserts are freshly baked in small batches."}
+                {index === 3 && "Packed, ribboned, and sent across Mumbai."}
+                {index === 4 && "Break, share, melt, repeat."}
+              </p>
             </div>
           ))}
         </div>
@@ -938,111 +697,62 @@ function FaqSection() {
   );
 }
 
-function ContactSection() {
-  const [productType, setProductType] = useState("Resin Wall Clock");
-
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const message = [
-      "Hello Resin Passion, I would like to start a custom order.",
-      `Name: ${formData.get("name") || ""}`,
-      `Phone: ${formData.get("phone") || ""}`,
-      `Email: ${formData.get("email") || ""}`,
-      `Product Type: ${productType}`,
-      `Requirements: ${formData.get("requirements") || ""}`,
-    ].join("\n");
-
-    window.open(getWhatsappUrl(message), "_blank", "noopener,noreferrer");
-  }
-
+function FinalCta() {
   return (
-    <section id="contact" className="relative overflow-hidden px-5 py-24 md:px-8 lg:px-12 lg:py-32">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(212,175,55,0.14),transparent_34%)]" />
-      <div className="relative mx-auto grid max-w-7xl gap-10 rounded-[2.5rem] border border-[#D4AF37]/20 bg-[#111111]/80 p-6 shadow-[0_40px_120px_rgba(0,0,0,0.5)] backdrop-blur-xl md:p-10 lg:grid-cols-[0.92fr_1.08fr]">
-        <div data-reveal>
-          <p className="text-sm font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
-            Start your custom order
-          </p>
-          <h2 className="mt-5 font-display text-5xl leading-none tracking-[-0.04em] text-white md:text-7xl">
-            Let&apos;s turn your story into a piece of art.
+    <section id="order" className="relative z-10 px-5 pb-24 pt-8 md:px-8 lg:px-12 lg:pb-32">
+      <div className="mx-auto overflow-hidden rounded-[3.25rem] bg-[#4A2C2A] p-8 text-center text-[#FFF8F3] shadow-[0_45px_120px_rgba(74,44,42,0.22)] md:p-16 lg:p-24">
+        <div className="mx-auto max-w-5xl">
+          <SectionKicker>Fresh batches open weekly</SectionKicker>
+          <h2 className="mt-7 font-display text-6xl leading-[0.88] tracking-[-0.065em] md:text-9xl">
+            Your Next Favorite Dessert Awaits.
           </h2>
-          <p className="mt-6 max-w-xl leading-8 text-white/62">
-            Share your occasion, preferred colors, names or dates, and reference
-            ideas. You&apos;ll receive a guided consultation before the piece is made.
+          <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-[#FFF8F3]/68">
+            Order premium eggless cookies, brownies, tins, and gifting boxes from Lower Parel, Mumbai.
           </p>
-          <div className="mt-8 grid gap-4 text-sm text-white/64 sm:grid-cols-2">
-            {["Limited custom slots", "Mumbai-based craft", "Premium gift packaging", "Fast WhatsApp response"].map(
-              (item) => (
-                <div key={item} className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-[#E5C77D]" />
-                  {item}
-                </div>
-              )
-            )}
+          <div className="mt-10 flex justify-center">
+            <MagneticButton href={instagramUrl} external className="bg-[#F5D8E2] text-[#4A2C2A] hover:bg-white">
+              Order on Instagram <ArrowRight className="h-4 w-4" />
+            </MagneticButton>
           </div>
         </div>
-        <form data-reveal onSubmit={handleSubmit} className="rounded-[2rem] border border-white/10 bg-black/30 p-5 md:p-7">
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Input name="name" required placeholder="Name" className="border-white/10 bg-white/[0.06] text-white placeholder:text-white/35" />
-            <Input name="phone" required placeholder="Phone" className="border-white/10 bg-white/[0.06] text-white placeholder:text-white/35" />
-            <Input name="email" type="email" placeholder="Email" className="border-white/10 bg-white/[0.06] text-white placeholder:text-white/35" />
-            <select
-              value={productType}
-              onChange={(event) => setProductType(event.target.value)}
-              className="h-12 rounded-xl border border-white/10 bg-white/[0.06] px-4 text-sm text-white outline-none focus:ring-2 focus:ring-[#D4AF37]/30"
-            >
-              {["Resin Wall Clock", "Personalized Name Plate", "Wedding Gift", "Anniversary Gift", "Housewarming Gift", "Luxury Decor Piece"].map(
-                (item) => (
-                  <option key={item} className="bg-[#111111] text-white">
-                    {item}
-                  </option>
-                )
-              )}
-            </select>
-          </div>
-          <Textarea
-            name="requirements"
-            required
-            placeholder="Tell us about your custom requirements, size, colors, names, dates, or occasion..."
-            className="mt-4 min-h-36 border-white/10 bg-white/[0.06] text-white placeholder:text-white/35"
-          />
-          <Button type="submit" size="lg" className="mt-5 w-full bg-[#D4AF37] text-black hover:bg-[#E5C77D]">
-            <MessageCircle className="h-4 w-4" />
-            Start Your Custom Order
-          </Button>
-        </form>
       </div>
     </section>
   );
 }
 
-function StickyWhatsapp() {
+function SectionIntro({ eyebrow, title, copy }: { eyebrow: string; title: string; copy: string }) {
   return (
-    <motion.a
-      href={getWhatsappUrl()}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_18px_50px_rgba(37,211,102,0.35)] md:h-16 md:w-16"
-      whileHover={{ scale: 1.08 }}
-      whileTap={{ scale: 0.95 }}
-      aria-label="Start WhatsApp inquiry"
-    >
-      <MessageCircle className="h-6 w-6" />
-    </motion.a>
+    <div data-reveal className="max-w-4xl">
+      <SectionKicker>{eyebrow}</SectionKicker>
+      <h2 className="mt-5 font-display text-5xl leading-[0.92] tracking-[-0.06em] text-[#4A2C2A] md:text-7xl">
+        {title}
+      </h2>
+      <p className="mt-6 max-w-2xl text-lg leading-8 text-[#4A2C2A]/68">{copy}</p>
+    </div>
+  );
+}
+
+function SectionKicker({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="inline-flex items-center gap-3 text-xs font-black uppercase tracking-[0.36em] text-[#C8A96B]">
+      <span className="h-px w-10 bg-[#C8A96B]" />
+      {children}
+    </p>
   );
 }
 
 function MagneticButton({
   href,
+  external,
+  variant = "solid",
+  className,
   children,
-  variant,
-  external = false,
 }: {
   href: string;
-  children: ReactNode;
-  variant: "gold" | "glass";
   external?: boolean;
+  variant?: "solid" | "outline";
+  className?: string;
+  children: React.ReactNode;
 }) {
   return (
     <motion.a
@@ -1052,10 +762,11 @@ function MagneticButton({
       whileHover={{ scale: 1.035, y: -2 }}
       whileTap={{ scale: 0.98 }}
       className={cn(
-        "inline-flex h-14 items-center justify-center gap-2 rounded-full px-8 text-sm font-semibold transition",
-        variant === "gold"
-          ? "bg-[#D4AF37] text-black shadow-[0_18px_55px_rgba(212,175,55,0.28)] hover:bg-[#E5C77D]"
-          : "border border-white/15 bg-white/[0.06] text-white backdrop-blur-xl hover:border-[#D4AF37]/50"
+        "group inline-flex items-center justify-center gap-3 rounded-full px-7 py-4 text-sm font-black uppercase tracking-[0.2em] shadow-[0_18px_45px_rgba(74,44,42,0.16)] transition",
+        variant === "solid"
+          ? "bg-[#4A2C2A] text-[#FFF8F3] hover:bg-[#2B1716]"
+          : "border border-[#4A2C2A]/16 bg-white/45 text-[#4A2C2A] backdrop-blur-xl hover:border-[#C8A96B]/60 hover:bg-white",
+        className
       )}
     >
       {children}
@@ -1063,34 +774,18 @@ function MagneticButton({
   );
 }
 
-function SectionIntro({
-  eyebrow,
-  title,
-  description,
-  align = "center",
-}: {
-  eyebrow: string;
-  title: string;
-  description: string;
-  align?: "left" | "center";
-}) {
+function FloatingCookie({ className, delay }: { className: string; delay: number }) {
   return (
-    <div
-      data-reveal
-      className={cn(
-        "max-w-4xl",
-        align === "center" ? "mx-auto text-center" : "text-left"
-      )}
+    <motion.div
+      aria-hidden
+      className={cn("absolute z-10 h-20 w-20 rounded-full bg-[#9B5A3C] shadow-[inset_-12px_-16px_24px_rgba(74,44,42,0.28),0_22px_45px_rgba(74,44,42,0.16)]", className)}
+      animate={{ y: [0, -18, 0], rotate: [0, 8, 0] }}
+      transition={{ duration: 6, delay, repeat: Infinity, ease: "easeInOut" }}
     >
-      <p className="text-sm font-semibold uppercase tracking-[0.32em] text-[#D4AF37]">
-        {eyebrow}
-      </p>
-      <h2 className="mt-4 text-balance font-display text-4xl leading-[0.98] tracking-[-0.045em] text-white md:text-6xl">
-        {title}
-      </h2>
-      <p className="mt-5 max-w-2xl text-lg leading-8 text-white/58 md:text-xl">
-        {description}
-      </p>
-    </div>
+      <span className="absolute left-5 top-5 h-3 w-3 rounded-full bg-[#4A2C2A]" />
+      <span className="absolute right-5 top-8 h-2.5 w-2.5 rounded-full bg-[#4A2C2A]" />
+      <span className="absolute bottom-5 left-8 h-3.5 w-3.5 rounded-full bg-[#4A2C2A]" />
+    </motion.div>
   );
 }
+
