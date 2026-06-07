@@ -1,50 +1,42 @@
 import Link from "next/link";
-import Image from "next/image";
-import { Instagram, Mail, MapPin, Sparkles } from "lucide-react";
+import { Mail, Sparkles, Twitter, Youtube } from "lucide-react";
 import { appName } from "@/data/linkhub";
 
-const instagramUrl = "https://www.instagram.com/melt.bombay?igsh=Y21oYjlnenl5cnFv";
-
 const footerLinks = [
-  { href: "/#collections", label: "Collections" },
-  { href: "/#story", label: "Our Story" },
-  { href: "/#signature", label: "Signature Products" },
-  { href: "/#gifting", label: "Corporate Gifting" },
-  { href: "/#order", label: "Order Now" },
+  { href: "/#features", label: "Features" },
+  { href: "/#how-it-works", label: "How it works" },
+  { href: "/#templates", label: "Templates" },
+  { href: "/#analytics", label: "Analytics" },
+  { href: "/#pricing", label: "Pricing" },
 ];
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-[#4A2C2A]/10 bg-[#FFF8F3] px-5 py-14 text-[#4A2C2A] md:px-8 lg:px-12">
+    <footer className="border-t border-slate-200 bg-white px-5 py-14 text-slate-950 md:px-8 lg:px-12">
       <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.2fr_0.8fr_0.8fr]">
         <div>
           <Link href="/" className="inline-flex items-center gap-3">
-            <span className="relative h-12 w-12 overflow-hidden rounded-full border border-[#C8A96B]/40 bg-[#4A2C2A]">
-              <Image
-                src="/melt-bombay-logo-v2.png"
-                alt="MELT BOMBAY logo"
-                fill
-                sizes="48px"
-                className="object-cover"
-              />
+            <span className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-violet-600 to-cyan-400 text-white">
+              <Sparkles className="h-5 w-5" />
             </span>
-            <span className="font-display text-2xl font-semibold tracking-[-0.04em]">{appName}</span>
+            <span className="text-2xl font-black tracking-[-0.04em]">{appName}</span>
           </Link>
-          <p className="mt-5 max-w-md leading-7 text-[#4A2C2A]/62">
-            Premium eggless desserts, cookie tins, brownies, and luxury gifting boxes handcrafted in Lower Parel,
-            Mumbai.
+          <p className="mt-5 max-w-md leading-7 text-slate-600">
+            A premium link-in-bio platform for creators and businesses that want Instagram traffic to convert into
+            clicks, bookings, leads, and sales.
           </p>
           <div className="mt-6 flex gap-3">
             {[
-              { Icon: Instagram, href: instagramUrl, label: "Instagram" },
-              { Icon: Sparkles, href: "/#collections", label: "Collections" },
+              { Icon: Twitter, href: "#", label: "Twitter" },
+              { Icon: Youtube, href: "#", label: "YouTube" },
+              { Icon: Sparkles, href: "/#templates", label: "Templates" },
             ].map(({ Icon, href, label }) => (
               <a
                 key={label}
                 href={href}
                 target={href.startsWith("http") ? "_blank" : undefined}
                 rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-[#F5D8E2] text-[#4A2C2A]/70 transition hover:bg-[#4A2C2A] hover:text-[#FFF8F3]"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-600 transition hover:bg-slate-950 hover:text-white"
                 aria-label={label}
               >
                 <Icon className="h-4 w-4" />
@@ -53,13 +45,13 @@ export function SiteFooter() {
           </div>
         </div>
         <div>
-          <p className="text-xs font-black uppercase tracking-[0.3em] text-[#C8A96B]">Explore</p>
+          <p className="text-xs font-black uppercase tracking-[0.3em] text-violet-600">Explore</p>
           <div className="mt-5 grid gap-3 text-sm">
           {footerLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-[#4A2C2A]/62 transition hover:text-[#4A2C2A]"
+              className="text-slate-600 transition hover:text-slate-950"
             >
               {link.label}
             </Link>
@@ -67,23 +59,26 @@ export function SiteFooter() {
           </div>
         </div>
         <div>
-          <p className="text-xs font-black uppercase tracking-[0.3em] text-[#C8A96B]">Contact</p>
-          <div className="mt-5 grid gap-3 text-sm text-[#4A2C2A]/62">
-            <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 transition hover:text-[#4A2C2A]">
-              <Instagram className="h-4 w-4" /> @melt.bombay
+          <p className="text-xs font-black uppercase tracking-[0.3em] text-violet-600">Product</p>
+          <div className="mt-5 grid gap-3 text-sm text-slate-600">
+            <Link href="/login" className="transition hover:text-slate-950">
+              Login
+            </Link>
+            <Link href="/signup" className="transition hover:text-slate-950">
+              Get Started Free
+            </Link>
+            <Link href="/dashboard" className="transition hover:text-slate-950">
+              Dashboard preview
+            </Link>
+            <a href="mailto:hello@qubelinx.com" className="inline-flex items-center gap-2 transition hover:text-slate-950">
+              <Mail className="h-4 w-4" /> hello@qubelinx.com
             </a>
-            <a href="mailto:hello@meltbombay.com" className="inline-flex items-center gap-2 transition hover:text-[#4A2C2A]">
-              <Mail className="h-4 w-4" /> hello@meltbombay.com
-            </a>
-            <span className="inline-flex items-center gap-2">
-              <MapPin className="h-4 w-4" /> Lower Parel, Mumbai
-            </span>
           </div>
         </div>
       </div>
-      <div className="mx-auto mt-12 flex max-w-7xl flex-col gap-3 border-t border-[#4A2C2A]/10 pt-6 text-sm text-[#4A2C2A]/45 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mx-auto mt-12 flex max-w-7xl flex-col gap-3 border-t border-slate-200 pt-6 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
         <p>© {new Date().getFullYear()} {appName}. All rights reserved.</p>
-        <p>Eggless Desserts That Melt In Your Mouth.</p>
+        <p>Not just a link tool. A conversion engine for Instagram traffic.</p>
       </div>
     </footer>
   );

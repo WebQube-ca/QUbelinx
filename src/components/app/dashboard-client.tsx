@@ -16,20 +16,37 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { analyticsCards, dashboardLinks } from "@/data/linkhub";
 import { cn } from "@/lib/utils";
 
 type DashboardLink = (typeof dashboardLinks)[number];
-const STARTER_LINK_LIMIT = 4;
+type ProfileState = {
+  name: string;
+  username: string;
+  bio: string;
+};
+
+const STARTER_LINK_LIMIT = 5;
 
 export function DashboardClient() {
-  const [links, setLinks] = useState<DashboardLink[]>(dashboardLinks);
+  const [links, setLinks] = useState<DashboardLink[]>(dashboardLinks.slice(0, 4));
   const [draggedId, setDraggedId] = useState<string | null>(null);
+  const [profile, setProfile] = useState<ProfileState>({
+    name: "Ava Studio",
+    username: "avastudio",
+    bio: "Creator growth systems, brand partnerships, and launch templates.",
+  });
 
   const totalClicks = useMemo(
     () => links.reduce((total, link) => total + link.clicks, 0),
     [links]
   );
+
+  const averageCtr = useMemo(() => {
+    if (!links.length) return 0;
+    return links.reduce((total, link) => total + link.ctr, 0) / links.length;
+  }, [links]);
 
   function addLink() {
     if (links.length >= STARTER_LINK_LIMIT) return;
@@ -81,7 +98,7 @@ export function DashboardClient() {
               Build and optimize your profile page.
             </h1>
             <p className="mt-4 max-w-2xl text-slate-600">
-              Starter plan limit: {links.length}/{STARTER_LINK_LIMIT} links.
+              Free plan limit: {links.length}/{STARTER_LINK_LIMIT} links.
               Drag to reorder, edit live, and watch click analytics update in
               the workspace.
             </p>
@@ -102,10 +119,15 @@ export function DashboardClient() {
               <div className="flex items-center justify-between">
                 <card.icon className="h-5 w-5 text-violet-600" />
                 <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-bold text-emerald-700">
-                  {index === 1 ? totalClicks.toLocaleString() : card.delta}
+                  {index === 1 ? `${totalClicks.toLocaleString()} total` : card.delta}
                 </span>
               </div>
-              <p className="mt-5 text-3xl font-black tracking-tight">{card.value}</p>
+              <p className="mt-5 text-3xl font-black tracking-tight">
+                {index === 1 && totalClicks.toLocaleString()}
+                {index === 2 && `${averageCtr.toFixed(1)}%`}
+                {index === 3 && `${links.length} / ${STARTER_LINK_LIMIT}`}
+                {index !== 1 && index !== 2 && index !== 3 && card.value}
+              </p>
               <p className="mt-1 text-sm text-slate-500">{card.label}</p>
             </div>
           ))}
@@ -113,7 +135,7 @@ export function DashboardClient() {
 
         <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_410px]">
           <div className="space-y-6">
-            <ProfileEditor />
+            <ProfileEditor profile={profile} setProfile={setProfile} />
             <div className="rounded-[2rem] border border-white bg-white p-5 shadow-xl">
               <div className="flex items-center justify-between gap-3">
                 <div>
@@ -123,7 +145,7 @@ export function DashboardClient() {
                   </p>
                 </div>
                 <span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-bold text-violet-700">
-                  Starter max {STARTER_LINK_LIMIT}
+                  Free max {STARTER_LINK_LIMIT}
                 </span>
               </div>
               <div className="mt-5 space-y-4">
@@ -200,17 +222,30 @@ export function DashboardClient() {
               </div>
             </div>
           </div>
-          <LivePreview links={links} />
+          <LivePreview links={links} profile={profile} />
         </div>
       </div>
     </section>
   );
 }
 
-function ProfileEditor() {
+function ProfileEditor({
+  profile,
+  setProfile,
+}: {
+  profile: ProfileState;
+  setProfile: (profile: ProfileState) => void;
+}) {
+  function updateProfile(key: keyof ProfileState, value: string) {
+    setProfile({ ...profile, [key]: value });
+  }
+
   return (
     <div className="rounded-[2rem] border border-white bg-white p-5 shadow-xl">
-      <h2 className="text-xl font-black text-slate-950">Profile page</h2>
+      <h2 className="text-xl font-black text-slate-950">Create profile page</h2>
+      <p className="mt-1 text-sm text-slate-500">
+        Edit the public profile shown at /{profile.username || "username"}.
+      </p>
       <div className="mt-5 grid gap-4 md:grid-cols-[120px_1fr_1fr]">
         <Image
           src="https://images.unsplash.com/photo-1554151228-14d9def656e4?auto=format&fit=crop&w=240&q=80"
@@ -221,17 +256,27 @@ function ProfileEditor() {
         />
         <div className="space-y-2">
           <Label htmlFor="profile-name">Name</Label>
-          <Input id="profile-name" defaultValue="Ava Studio" />
+          <Input
+            id="profile-name"
+            value={profile.name}
+            onChange={(event) => updateProfile("name", event.target.value)}
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="profile-username">Username</Label>
-          <Input id="profile-username" defaultValue="avastudio" />
+          <Input
+            id="profile-username"
+            value={profile.username}
+            onChange={(event) => updateProfile("username", event.target.value.toLowerCase().replace(/\s+/g, ""))}
+          />
         </div>
         <div className="space-y-2 md:col-span-2 md:col-start-2">
           <Label htmlFor="profile-bio">Bio</Label>
-          <Input
+          <Textarea
             id="profile-bio"
-            defaultValue="Creator growth systems, brand partnerships, and launch templates."
+            value={profile.bio}
+            onChange={(event) => updateProfile("bio", event.target.value)}
+            className="min-h-24"
           />
         </div>
       </div>
@@ -239,7 +284,7 @@ function ProfileEditor() {
   );
 }
 
-function LivePreview({ links }: { links: DashboardLink[] }) {
+function LivePreview({ links, profile }: { links: DashboardLink[]; profile: ProfileState }) {
   return (
     <aside className="lg:sticky lg:top-28 lg:self-start">
       <div className="rounded-[2.25rem] border border-white bg-white p-5 shadow-2xl">
@@ -254,15 +299,15 @@ function LivePreview({ links }: { links: DashboardLink[] }) {
           <div className="rounded-[1.5rem] bg-gradient-to-b from-indigo-950 via-slate-950 to-slate-900 p-5">
             <Image
               src="https://images.unsplash.com/photo-1554151228-14d9def656e4?auto=format&fit=crop&w=240&q=80"
-              alt="Ava Studio"
+              alt={profile.name}
               width={88}
               height={88}
               className="mx-auto h-20 w-20 rounded-full object-cover ring-4 ring-white/10"
             />
             <div className="mt-4 text-center">
-              <h3 className="text-xl font-black">Ava Studio</h3>
+              <h3 className="text-xl font-black">{profile.name || "Untitled profile"}</h3>
               <p className="mt-1 text-sm text-white/60">
-                Creator growth systems + brand partnerships
+                {profile.bio || "Add a short bio to explain why visitors should click."}
               </p>
             </div>
             <div className="mt-6 space-y-3">

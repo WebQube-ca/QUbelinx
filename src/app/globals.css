@@ -4,56 +4,56 @@
 
 @layer base {
   :root {
-    --brand-primary: 245 216 226;
-    --brand-secondary: 200 169 107;
-    --brand-accent: 255 248 243;
-    --brand-neutral: 74 44 42;
-    --brand-text: 74 44 42;
-    --brand-background: 255 248 243;
-    --brand-dark-section: 74 44 42;
+    --brand-primary: 99 102 241;
+    --brand-secondary: 34 211 238;
+    --brand-accent: 238 242 255;
+    --brand-neutral: 15 23 42;
+    --brand-text: 15 23 42;
+    --brand-background: 247 248 255;
+    --brand-dark-section: 15 23 42;
 
     --hero-gradient: radial-gradient(
       ellipse 80% 60% at 50% 0%,
-        rgba(245, 216, 226, 0.7) 0%,
+        rgba(99, 102, 241, 0.22) 0%,
       transparent 70%
     );
     --luxury-mesh:
       radial-gradient(
         at 40% 20%,
-        rgba(245, 216, 226, 0.48) 0px,
+        rgba(99, 102, 241, 0.22) 0px,
         transparent 50%
       ),
       radial-gradient(
         at 80% 0%,
-        rgba(200, 169, 107, 0.24) 0px,
+        rgba(34, 211, 238, 0.18) 0px,
         transparent 50%
       ),
       radial-gradient(
         at 0% 50%,
-        rgba(223, 168, 182, 0.24) 0px,
+        rgba(168, 85, 247, 0.14) 0px,
         transparent 50%
       );
     --glass-bg: rgba(255, 255, 255, 0.48);
-    --glass-border: rgba(74, 44, 42, 0.1);
+    --glass-border: rgba(15, 23, 42, 0.1);
     --glow-shadow:
-      0 0 0 1px rgba(200, 169, 107, 0.2),
-      0 25px 50px -12px rgba(74, 44, 42, 0.16),
-      0 0 60px rgba(245, 216, 226, 0.22);
+      0 0 0 1px rgba(99, 102, 241, 0.16),
+      0 25px 50px -12px rgba(15, 23, 42, 0.14),
+      0 0 60px rgba(34, 211, 238, 0.14);
 
-    --background: 24 100% 98%;
-    --foreground: 4 22% 23%;
-    --card: 24 100% 98%;
-    --card-foreground: 4 22% 23%;
-    --popover: 24 100% 98%;
-    --popover-foreground: 4 22% 23%;
-    --primary: 4 22% 23%;
-    --primary-foreground: 24 100% 98%;
-    --secondary: 340 60% 90%;
-    --secondary-foreground: 4 22% 23%;
-    --muted: 340 45% 93%;
-    --muted-foreground: 4 18% 44%;
-    --accent: 40 44% 60%;
-    --accent-foreground: 4 22% 23%;
+    --background: 229 100% 99%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 239 84% 67%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 221 100% 96%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 187 92% 69%;
+    --accent-foreground: 222 47% 11%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 16%;

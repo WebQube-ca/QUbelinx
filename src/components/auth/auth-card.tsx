@@ -33,7 +33,7 @@ export function AuthCard({ mode }: { mode: AuthMode }) {
   }
 
   return (
-    <section className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(124,58,237,0.18),transparent_34%),linear-gradient(180deg,#fff,#eef2ff)] px-5 py-28 md:px-8 lg:px-12">
+    <section className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(124,58,237,0.18),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(34,211,238,0.18),transparent_32%),linear-gradient(180deg,#fff,#eef2ff)] px-5 py-28 md:px-8 lg:px-12">
       <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[0.92fr_1.08fr]">
         <div className="hidden lg:block">
           <div className="rounded-[2.5rem] bg-slate-950 p-8 text-white shadow-2xl">
@@ -138,7 +138,7 @@ export function AuthCard({ mode }: { mode: AuthMode }) {
             </Button>
           </form>
           <p className="mt-6 text-center text-sm text-slate-500">
-            {isSignup ? "Already have an account?" : "New to MELT BOMBAY?"}{" "}
+            {isSignup ? "Already have an account?" : `New to ${appName}?`}{" "}
             <Link
               href={isSignup ? "/login" : "/signup"}
               className="font-bold text-violet-600"

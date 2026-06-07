@@ -1,6 +1,7 @@
 import {
   BarChart3,
   CalendarDays,
+  CheckCircle2,
   Globe2,
   Link2,
   MessageCircle,
@@ -13,14 +14,14 @@ import {
   Zap,
 } from "lucide-react";
 
-export const appName = "MELT BOMBAY";
+export const appName = "QubeLinx";
 
 export const features = [
   {
     icon: Zap,
-    title: "Conversion-first link pages",
+    title: "Conversion-first bio hubs",
     description:
-      "Guide Instagram traffic to products, bookings, offers, lead forms, and social proof without distracting dead ends.",
+      "Turn every Instagram profile visit into a guided path to offers, bookings, product drops, and lead capture.",
   },
   {
     icon: MessageCircle,
@@ -36,7 +37,7 @@ export const features = [
   },
   {
     icon: Palette,
-    title: "Premium creator themes",
+    title: "Premium mobile themes",
     description:
       "Launch polished mobile pages with brandable gradients, cards, typography, and monetization sections.",
   },
@@ -93,52 +94,77 @@ export const templates = [
   },
 ];
 
+export const premiumCards = [
+  {
+    label: "For creators",
+    title: "Monetization-ready pages",
+    description: "Sell guides, collect emails, route brand deals, and keep your highest-value CTA above the fold.",
+    image:
+      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=86",
+  },
+  {
+    label: "For businesses",
+    title: "Instant contact actions",
+    description: "WhatsApp, call, booking, and quote buttons help local visitors take action without friction.",
+    image:
+      "https://images.unsplash.com/photo-1556745757-8d76bdb6984b?auto=format&fit=crop&w=900&q=86",
+  },
+  {
+    label: "For teams",
+    title: "Campaign clarity",
+    description: "Track clicks, CTR, and priority offers so Instagram traffic becomes a measurable growth channel.",
+    image:
+      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=86",
+  },
+];
+
 export const pricingPlans = [
   {
-    name: "Starter",
-    price: "$10",
-    description: "For creators and new businesses launching one polished bio hub.",
-    badge: "Start here",
-    cta: "Start Starter",
+    name: "Free",
+    price: "$0",
+    period: "forever",
+    description: "For creators and small brands launching their first conversion-ready profile.",
+    badge: "Start free",
+    cta: "Get Started Free",
     features: [
       "1 profile page",
-      "4 conversion links",
+      "5 links",
       "Basic analytics",
-      "Email tech support",
-      "Platform branding",
+      "Mobile-optimized templates",
+      "QubeLinx branding",
     ],
   },
   {
-    name: "Growth",
-    price: "$30",
+    name: "Pro",
+    price: "$8",
+    period: "per month",
     description: "For creators monetizing launches and businesses capturing leads.",
     badge: "Most Popular",
-    cta: "Start Growth",
+    cta: "Start Pro",
     highlighted: true,
     features: [
-      "7 conversion links",
+      "Unlimited links",
       "Custom themes",
       "Advanced analytics",
-      "Live chat support",
-      "Priority link scheduling",
       "Remove branding",
+      "Priority link scheduling",
+      "Creator monetization blocks",
     ],
   },
   {
     name: "Business",
-    price: "$60",
+    price: "$19",
+    period: "per month",
     description: "For teams that turn social traffic into qualified leads.",
     badge: "Scale",
     cta: "Start Business",
     features: [
-      "10 conversion links",
       "Lead tracking",
       "WhatsApp / Call buttons",
       "Booking integration style section",
       "Priority placement",
-      "Priority tech support",
-      "Priority live chat support",
       "Campaign performance view",
+      "Priority support",
     ],
   },
 ];
@@ -203,6 +229,14 @@ export const dashboardLinks = [
     ctr: 8.3,
     type: "Lead magnet",
   },
+  {
+    id: "5",
+    title: "Apply for the VIP client list",
+    url: "https://example.com/vip",
+    clicks: 137,
+    ctr: 5.9,
+    type: "Lead",
+  },
 ];
 
 export const profileLinks = [
@@ -230,11 +264,17 @@ export const profileLinks = [
     icon: Globe2,
     clicks: "194 clicks",
   },
+  {
+    title: "Apply for VIP launch access",
+    subtitle: "Private client list",
+    icon: CheckCircle2,
+    clicks: "137 clicks",
+  },
 ];
 
 export const analyticsCards = [
   { label: "Total page views", value: "12,842", delta: "+24%", icon: TrendingUp },
   { label: "Total link clicks", value: "2,326", delta: "+18%", icon: MousePointerClick },
   { label: "Average CTR", value: "18.1%", delta: "+4.2%", icon: BarChart3 },
-  { label: "Active links", value: "4 / 4", delta: "Starter plan", icon: Link2 },
+  { label: "Active links", value: "5 / 5", delta: "Free plan", icon: Link2 },
 ];

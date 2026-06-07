@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://bioboost.app/sitemap.xml
+Sitemap: https://qubelinx.com/sitemap.xml
