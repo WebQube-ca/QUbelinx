@@ -1,12 +1,12 @@
 import type { NextAuthOptions } from "next-auth";
 import AppleProvider from "next-auth/providers/apple";
-import EmailProvider from "next-auth/providers/email";
+import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { ensureUserProfile } from "@/lib/profile";
+import { verifyPassword } from "@/lib/password";
 import { prisma } from "@/lib/prisma";
 
-const hasEmailServer = Boolean(process.env.EMAIL_SERVER?.trim());
 const hasGoogle =
   Boolean(process.env.GOOGLE_CLIENT_ID?.trim()) &&
   Boolean(process.env.GOOGLE_CLIENT_SECRET?.trim());
@@ -14,27 +14,54 @@ const hasApple =
   Boolean(process.env.APPLE_CLIENT_ID?.trim()) &&
   Boolean(process.env.APPLE_CLIENT_SECRET?.trim());
 
+const placeholderSecret = "replace-with-a-long-random-secret";
+const authSecret = process.env.NEXTAUTH_SECRET?.trim();
+const hasAuthSecret = Boolean(authSecret && authSecret !== placeholderSecret);
+
 export const authOptions: NextAuthOptions = {
+  secret: authSecret,
   adapter: PrismaAdapter(prisma),
   pages: {
     signIn: "/login",
   },
   session: {
-    strategy: "database",
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60,
   },
   providers: [
-    EmailProvider({
-      server: process.env.EMAIL_SERVER ?? "smtp://localhost:1025",
-      from: process.env.EMAIL_FROM ?? "QubeLinx <login@webqube.ca>",
-      ...(hasEmailServer
-        ? {}
-        : {
-            sendVerificationRequest({ identifier, url }) {
-              console.log("\n[QubeLinx] Magic login link");
-              console.log(`  Email: ${identifier}`);
-              console.log(`  URL:   ${url}\n`);
-            },
-          }),
+    CredentialsProvider({
+      id: "credentials",
+      name: "Email and password",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        const email = credentials?.email?.trim().toLowerCase();
+        const password = credentials?.password ?? "";
+
+        if (!email || !password) {
+          return null;
+        }
+
+        const user = await prisma.user.findUnique({ where: { email } });
+
+        if (!user?.passwordHash) {
+          return null;
+        }
+
+        const valid = await verifyPassword(password, user.passwordHash);
+        if (!valid) {
+          return null;
+        }
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          image: user.image,
+        };
+      },
     }),
     ...(hasGoogle
       ? [
@@ -62,9 +89,15 @@ export const authOptions: NextAuthOptions = {
     },
   },
   callbacks: {
-    session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id;
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      if (session.user && token.id) {
+        session.user.id = token.id as string;
       }
       return session;
     },
@@ -75,8 +108,11 @@ export const authOptions: NextAuthOptions = {
 };
 
 export const authProviders = {
-  email: true,
+  credentials: true,
   google: hasGoogle,
   apple: hasApple,
-  devEmailMode: !hasEmailServer,
+  authConfigured: hasAuthSecret,
+  setupError: !hasAuthSecret
+    ? "Auth secret is missing. Set NEXTAUTH_SECRET in your environment variables."
+    : null,
 };

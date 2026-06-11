@@ -33,21 +33,16 @@ Required for local development:
 | `NEXTAUTH_URL` | App URL (`http://localhost:3000`) |
 | `NEXTAUTH_SECRET` | Random secret for session encryption |
 
-Optional auth providers:
+Optional OAuth:
 
 | Variable | Purpose |
 |----------|---------|
-| `EMAIL_SERVER` | SMTP for magic-link login. Leave empty in dev — links print to the terminal. |
-| `EMAIL_FROM` | From address for magic-link emails |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Google OAuth |
 | `APPLE_CLIENT_ID` / `APPLE_CLIENT_SECRET` | Apple OAuth |
 
-## Local login (no SMTP)
+## Sign up / login
 
-1. Go to `/login`
-2. Enter any email and submit
-3. Copy the magic link from your terminal output
-4. Open it in the browser — you'll land on `/dashboard`
+Use **email + password** at `/signup` and `/login`. Passwords must be at least 8 characters. No SMTP required.
 
 ## Tech Stack
 
@@ -77,3 +72,45 @@ npm run setup     # Push schema + seed demo data
 npm run db:push   # Sync Prisma schema to database
 npm run db:seed   # Seed demo profile
 ```
+
+## Deploy on Laravel Forge
+
+Your production `.env` on Forge must **not** use localhost values. The 500 on `/api/auth/signin/email` is almost always misconfigured env or a missing database.
+
+### Forge environment variables
+
+Set these in **Forge → Site → Environment**:
+
+```env
+DATABASE_URL="file:./production.db"
+NEXTAUTH_URL="https://qubelinx.on-forge.com"
+NEXTAUTH_SECRET="paste-output-of-openssl-rand-hex-32"
+```
+
+No email/SMTP setup is required for password login.
+
+Generate a secret locally:
+
+```bash
+openssl rand -hex 32
+```
+
+### Forge deploy script
+
+Add **before** `npm run build`:
+
+```bash
+cd $FORGE_SITE_PATH
+npm ci
+npm run forge:setup
+npm run build
+pm2 reload ...
+```
+
+`forge:setup` runs `prisma generate` and `prisma db push` so auth tables exist.
+
+### After updating env on Forge
+
+1. Save environment in Forge
+2. Redeploy the site
+3. Try login again — errors now show in the UI instead of hanging on "Sending..."
