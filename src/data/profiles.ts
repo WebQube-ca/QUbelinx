@@ -187,9 +187,3 @@ export const demoProfile: Profile = {
   ],
   workedWith: ["Notion", "Linear", "Framer", "Stripe"],
 };
-
-const profiles = [demoProfile];
-
-export function getProfileByUsername(username: string) {
-  return profiles.find((profile) => profile.username.toLowerCase() === username.toLowerCase()) ?? demoProfile;
-}

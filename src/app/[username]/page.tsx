@@ -1,6 +1,7 @@
+import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ProfilePage } from "@/components/profile/profile-page";
-import { getProfileByUsername } from "@/data/profiles";
+import { getProfileByUsername } from "@/lib/profile";
 
 type PublicProfilePageProps = {
   params: Promise<{ username: string }>;
@@ -8,7 +9,11 @@ type PublicProfilePageProps = {
 
 export async function generateMetadata({ params }: PublicProfilePageProps): Promise<Metadata> {
   const { username } = await params;
-  const profile = getProfileByUsername(username);
+  const profile = await getProfileByUsername(username);
+
+  if (!profile) {
+    return { title: "Profile not found | QubeLinx" };
+  }
 
   return {
     title: `${profile.name} | QubeLinx`,
@@ -23,7 +28,11 @@ export async function generateMetadata({ params }: PublicProfilePageProps): Prom
 
 export default async function PublicProfilePage({ params }: PublicProfilePageProps) {
   const { username } = await params;
-  const profile = getProfileByUsername(username);
+  const profile = await getProfileByUsername(username);
+
+  if (!profile) {
+    notFound();
+  }
 
   return <ProfilePage profile={profile} />;
 }

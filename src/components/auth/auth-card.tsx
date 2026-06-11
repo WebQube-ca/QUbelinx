@@ -11,23 +11,53 @@ import { appName } from "@/data/linkhub";
 
 type AuthMode = "login" | "signup";
 
-export function AuthCard({ mode }: { mode: AuthMode }) {
+type AuthProviders = {
+  email: boolean;
+  google: boolean;
+  apple: boolean;
+  devEmailMode: boolean;
+};
+
+export function AuthCard({
+  mode,
+  providers,
+}: {
+  mode: AuthMode;
+  providers: AuthProviders;
+}) {
   const isSignup = mode === "signup";
   const [email, setEmail] = useState("");
   const [pendingProvider, setPendingProvider] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
 
   async function handleEmailAuth(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setPendingProvider("email");
-    await signIn("email", {
+    setMessage(null);
+
+    const result = await signIn("email", {
       email,
       callbackUrl: "/dashboard",
+      redirect: false,
     });
+
     setPendingProvider(null);
+
+    if (result?.error) {
+      setMessage("Could not send login link. Check your email and try again.");
+      return;
+    }
+
+    setMessage(
+      providers.devEmailMode
+        ? "Check your terminal for the magic login link."
+        : "Check your inbox for a secure login link."
+    );
   }
 
   async function handleProviderAuth(provider: "google" | "apple") {
     setPendingProvider(provider);
+    setMessage(null);
     await signIn(provider, { callbackUrl: "/dashboard" });
     setPendingProvider(null);
   }
@@ -70,73 +100,76 @@ export function AuthCard({ mode }: { mode: AuthMode }) {
               ? "Sign up with email, Google, or Apple to start building your conversion-ready bio page."
               : "Log in with email, Google, or Apple to manage links, analytics, and your live profile."}
           </p>
-          <div className="mt-8 grid gap-3">
-            <Button
-              type="button"
-              variant="outline"
-              className="h-12 justify-start border-slate-200 bg-white text-slate-900 hover:bg-slate-50"
-              onClick={() => handleProviderAuth("google")}
-              disabled={pendingProvider !== null}
-            >
-              <Chrome className="h-4 w-4" />
-              {pendingProvider === "google"
-                ? "Connecting Google..."
-                : `${isSignup ? "Sign up" : "Login"} with Google`}
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              className="h-12 justify-start border-slate-200 bg-white text-slate-900 hover:bg-slate-50"
-              onClick={() => handleProviderAuth("apple")}
-              disabled={pendingProvider !== null}
-            >
-              <Apple className="h-4 w-4" />
-              {pendingProvider === "apple"
-                ? "Connecting Apple..."
-                : `${isSignup ? "Sign up" : "Login"} with Apple`}
-            </Button>
-          </div>
-          <div className="my-6 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-slate-400">
-            <span className="h-px flex-1 bg-slate-200" />
-            or use email
-            <span className="h-px flex-1 bg-slate-200" />
-          </div>
-          <form className="space-y-5" onSubmit={handleEmailAuth}>
-            {isSignup && (
-              <div className="space-y-2">
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" placeholder="Ava Studio" />
-              </div>
-            )}
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@brand.com"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                required
-              />
+          {(providers.google || providers.apple) && (
+            <div className="mt-8 grid gap-3">
+              {providers.google && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-12 justify-start border-slate-200 bg-white text-slate-900 hover:bg-slate-50"
+                  onClick={() => handleProviderAuth("google")}
+                  disabled={pendingProvider !== null}
+                >
+                  <Chrome className="h-4 w-4" />
+                  {pendingProvider === "google"
+                    ? "Connecting Google..."
+                    : `${isSignup ? "Sign up" : "Login"} with Google`}
+                </Button>
+              )}
+              {providers.apple && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-12 justify-start border-slate-200 bg-white text-slate-900 hover:bg-slate-50"
+                  onClick={() => handleProviderAuth("apple")}
+                  disabled={pendingProvider !== null}
+                >
+                  <Apple className="h-4 w-4" />
+                  {pendingProvider === "apple"
+                    ? "Connecting Apple..."
+                    : `${isSignup ? "Sign up" : "Login"} with Apple`}
+                </Button>
+              )}
             </div>
-            {isSignup && (
+          )}
+          {providers.email && (providers.google || providers.apple) && (
+            <div className="my-6 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-slate-400">
+              <span className="h-px flex-1 bg-slate-200" />
+              or use email
+              <span className="h-px flex-1 bg-slate-200" />
+            </div>
+          )}
+          {providers.email && (
+            <form className="space-y-5" onSubmit={handleEmailAuth}>
               <div className="space-y-2">
-                <Label htmlFor="username">Profile username</Label>
-                <Input id="username" placeholder="avastudio" />
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="you@brand.com"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  required
+                />
               </div>
-            )}
-            <Button
-              className="w-full bg-slate-950 hover:bg-slate-800"
-              size="lg"
-              disabled={pendingProvider !== null}
-            >
-              <Mail className="h-4 w-4" />
-              {pendingProvider === "email"
-                ? "Sending secure login link..."
-                : `${isSignup ? "Sign up" : "Login"} with Email`}
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          </form>
+              <Button
+                className="w-full bg-slate-950 hover:bg-slate-800"
+                size="lg"
+                disabled={pendingProvider !== null}
+              >
+                <Mail className="h-4 w-4" />
+                {pendingProvider === "email"
+                  ? "Sending secure login link..."
+                  : `${isSignup ? "Sign up" : "Login"} with Email`}
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </form>
+          )}
+          {message && (
+            <p className="mt-4 rounded-2xl bg-violet-50 px-4 py-3 text-sm font-medium text-violet-700">
+              {message}
+            </p>
+          )}
           <p className="mt-6 text-center text-sm text-slate-500">
             {isSignup ? "Already have an account?" : `New to ${appName}?`}{" "}
             <Link

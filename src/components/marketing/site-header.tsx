@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { Menu, Sparkles, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { appName } from "@/data/linkhub";
@@ -15,8 +16,10 @@ const navLinks = [
 ];
 
 export function SiteHeader() {
+  const { status } = useSession();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const isAuthenticated = status === "authenticated";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -55,16 +58,24 @@ export function SiteHeader() {
         </div>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <Button
-            asChild
-            variant="outline"
-            className="border-slate-200 bg-white/60 text-slate-950 hover:bg-white"
-          >
-            <Link href="/login">Login</Link>
-          </Button>
-          <Button asChild className="bg-slate-950 text-white hover:bg-slate-800">
-            <Link href="/signup">Get Started Free</Link>
-          </Button>
+          {isAuthenticated ? (
+            <Button asChild className="bg-slate-950 text-white hover:bg-slate-800">
+              <Link href="/dashboard">Dashboard</Link>
+            </Button>
+          ) : (
+            <>
+              <Button
+                asChild
+                variant="outline"
+                className="border-slate-200 bg-white/60 text-slate-950 hover:bg-white"
+              >
+                <Link href="/login">Login</Link>
+              </Button>
+              <Button asChild className="bg-slate-950 text-white hover:bg-slate-800">
+                <Link href="/signup">Get Started Free</Link>
+              </Button>
+            </>
+          )}
         </div>
 
         <button
@@ -92,11 +103,26 @@ export function SiteHeader() {
               </Link>
             ))}
             <div className="mt-2 grid gap-2">
-              <Button asChild className="bg-slate-950 text-white hover:bg-slate-800">
-                <Link href="/signup" onClick={() => setOpen(false)}>
-                  Get Started Free
-                </Link>
-              </Button>
+              {isAuthenticated ? (
+                <Button asChild className="bg-slate-950 text-white hover:bg-slate-800">
+                  <Link href="/dashboard" onClick={() => setOpen(false)}>
+                    Dashboard
+                  </Link>
+                </Button>
+              ) : (
+                <>
+                  <Button asChild variant="outline">
+                    <Link href="/login" onClick={() => setOpen(false)}>
+                      Login
+                    </Link>
+                  </Button>
+                  <Button asChild className="bg-slate-950 text-white hover:bg-slate-800">
+                    <Link href="/signup" onClick={() => setOpen(false)}>
+                      Get Started Free
+                    </Link>
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>

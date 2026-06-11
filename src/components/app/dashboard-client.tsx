@@ -1,12 +1,16 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { signOut } from "next-auth/react";
 import {
   BarChart3,
   Eye,
   GripVertical,
   Link2,
+  LoaderCircle,
+  LogOut,
   MessageCircle,
   MousePointerClick,
   Pencil,
@@ -17,26 +21,61 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { analyticsCards, dashboardLinks } from "@/data/linkhub";
+import { analyticsCards } from "@/data/linkhub";
+import type { DashboardLink, ProfilePayload } from "@/lib/profile";
+import { STARTER_LINK_LIMIT } from "@/lib/profile";
 import { cn } from "@/lib/utils";
 
-type DashboardLink = (typeof dashboardLinks)[number];
 type ProfileState = {
   name: string;
   username: string;
   bio: string;
+  image: string | null;
 };
 
-const STARTER_LINK_LIMIT = 5;
+const DEFAULT_IMAGE =
+  "https://images.unsplash.com/photo-1554151228-14d9def656e4?auto=format&fit=crop&w=240&q=80";
 
-export function DashboardClient() {
-  const [links, setLinks] = useState<DashboardLink[]>(dashboardLinks.slice(0, 4));
+export function DashboardClient({ userEmail }: { userEmail: string | null }) {
+  const [links, setLinks] = useState<DashboardLink[]>([]);
   const [draggedId, setDraggedId] = useState<string | null>(null);
   const [profile, setProfile] = useState<ProfileState>({
-    name: "Ava Studio",
-    username: "avastudio",
-    bio: "Creator growth systems, brand partnerships, and launch templates.",
+    name: "",
+    username: "",
+    bio: "",
+    image: DEFAULT_IMAGE,
   });
+  const [pageViews, setPageViews] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const loadProfile = useCallback(async () => {
+    setError(null);
+    const response = await fetch("/api/profile");
+
+    if (!response.ok) {
+      throw new Error("Could not load your profile.");
+    }
+
+    const data = (await response.json()) as { profile: ProfilePayload };
+    setProfile({
+      name: data.profile.name,
+      username: data.profile.username,
+      bio: data.profile.bio,
+      image: data.profile.image,
+    });
+    setLinks(data.profile.links);
+    setPageViews(data.profile.pageViews);
+  }, []);
+
+  useEffect(() => {
+    loadProfile()
+      .catch((loadError) => {
+        setError(loadError instanceof Error ? loadError.message : "Could not load profile.");
+      })
+      .finally(() => setLoading(false));
+  }, [loadProfile]);
 
   const totalClicks = useMemo(
     () => links.reduce((total, link) => total + link.clicks, 0),
@@ -44,46 +83,118 @@ export function DashboardClient() {
   );
 
   const averageCtr = useMemo(() => {
-    if (!links.length) return 0;
-    return links.reduce((total, link) => total + link.ctr, 0) / links.length;
-  }, [links]);
+    if (!pageViews) return 0;
+    return Number(((totalClicks / pageViews) * 100).toFixed(1));
+  }, [pageViews, totalClicks]);
 
-  function addLink() {
-    if (links.length >= STARTER_LINK_LIMIT) return;
-    setLinks((current) => [
-      ...current,
-      {
-        id: crypto.randomUUID(),
-        title: "New campaign link",
-        url: "https://example.com/new-offer",
-        clicks: 0,
-        ctr: 0,
-        type: "Campaign",
-      },
-    ]);
+  async function saveProfile(nextProfile: ProfileState) {
+    setSaving(true);
+    setError(null);
+
+    const response = await fetch("/api/profile", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(nextProfile),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setError(data.error ?? "Could not save profile.");
+      setSaving(false);
+      return false;
+    }
+
+    setProfile({
+      name: data.profile.name,
+      username: data.profile.username,
+      bio: data.profile.bio,
+      image: data.profile.image,
+    });
+    setLinks(data.profile.links);
+    setPageViews(data.profile.pageViews);
+    setSaving(false);
+    return true;
   }
 
-  function updateLink(id: string, key: "title" | "url", value: string) {
+  async function addLink() {
+    if (links.length >= STARTER_LINK_LIMIT) return;
+
+    setSaving(true);
+    setError(null);
+
+    const response = await fetch("/api/links", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: "New campaign link",
+        url: "https://example.com/new-offer",
+        type: "Campaign",
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setError(data.error ?? "Could not add link.");
+      setSaving(false);
+      return;
+    }
+
+    setLinks(data.profile.links);
+    setSaving(false);
+  }
+
+  async function updateLink(id: string, key: "title" | "url", value: string) {
     setLinks((current) =>
       current.map((link) => (link.id === id ? { ...link, [key]: value } : link))
     );
+
+    await fetch(`/api/links/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ [key]: value }),
+    });
   }
 
-  function deleteLink(id: string) {
-    setLinks((current) => current.filter((link) => link.id !== id));
+  async function deleteLink(id: string) {
+    setSaving(true);
+    const response = await fetch(`/api/links/${id}`, { method: "DELETE" });
+    const data = await response.json();
+
+    if (response.ok) {
+      setLinks(data.profile.links);
+    }
+
+    setSaving(false);
   }
 
-  function reorder(targetId: string) {
+  async function reorder(targetId: string) {
     if (!draggedId || draggedId === targetId) return;
 
-    setLinks((current) => {
-      const draggedIndex = current.findIndex((link) => link.id === draggedId);
-      const targetIndex = current.findIndex((link) => link.id === targetId);
-      const next = [...current];
-      const [dragged] = next.splice(draggedIndex, 1);
-      next.splice(targetIndex, 0, dragged);
-      return next;
+    const draggedIndex = links.findIndex((link) => link.id === draggedId);
+    const targetIndex = links.findIndex((link) => link.id === targetId);
+    const next = [...links];
+    const [dragged] = next.splice(draggedIndex, 1);
+    next.splice(targetIndex, 0, dragged);
+    setLinks(next);
+
+    await fetch("/api/links/reorder", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ orderedIds: next.map((link) => link.id) }),
     });
+  }
+
+  if (loading) {
+    return (
+      <section className="flex min-h-screen items-center justify-center bg-[#f7f8ff]">
+        <div className="flex items-center gap-3 rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-600 shadow-soft">
+          <LoaderCircle className="h-4 w-4 animate-spin" />
+          Loading your workspace...
+        </div>
+      </section>
+    );
   }
 
   return (
@@ -99,19 +210,37 @@ export function DashboardClient() {
             </h1>
             <p className="mt-4 max-w-2xl text-slate-600">
               Free plan limit: {links.length}/{STARTER_LINK_LIMIT} links.
-              Drag to reorder, edit live, and watch click analytics update in
-              the workspace.
+              Changes save to your live profile at{" "}
+              <Link href={`/${profile.username}`} className="font-bold text-violet-600">
+                /{profile.username || "username"}
+              </Link>
+              .
             </p>
+            {userEmail && (
+              <p className="mt-2 text-sm text-slate-500">Signed in as {userEmail}</p>
+            )}
           </div>
-          <Button
-            onClick={addLink}
-            disabled={links.length >= STARTER_LINK_LIMIT}
-            className="bg-slate-950 hover:bg-slate-800"
-          >
-            <Plus className="h-4 w-4" />
-            Add link
-          </Button>
+          <div className="flex flex-wrap gap-3">
+            <Button
+              onClick={addLink}
+              disabled={links.length >= STARTER_LINK_LIMIT || saving}
+              className="bg-slate-950 hover:bg-slate-800"
+            >
+              <Plus className="h-4 w-4" />
+              Add link
+            </Button>
+            <Button variant="outline" onClick={() => signOut({ callbackUrl: "/" })}>
+              <LogOut className="h-4 w-4" />
+              Sign out
+            </Button>
+          </div>
         </div>
+
+        {error && (
+          <p className="mt-6 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
+            {error}
+          </p>
+        )}
 
         <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           {analyticsCards.map((card, index) => (
@@ -119,14 +248,17 @@ export function DashboardClient() {
               <div className="flex items-center justify-between">
                 <card.icon className="h-5 w-5 text-violet-600" />
                 <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-bold text-emerald-700">
-                  {index === 1 ? `${totalClicks.toLocaleString()} total` : card.delta}
+                  {index === 0 && `${pageViews.toLocaleString()} views`}
+                  {index === 1 && `${totalClicks.toLocaleString()} total`}
+                  {index === 2 && `${averageCtr.toFixed(1)}% avg`}
+                  {index === 3 && "Free plan"}
                 </span>
               </div>
               <p className="mt-5 text-3xl font-black tracking-tight">
+                {index === 0 && pageViews.toLocaleString()}
                 {index === 1 && totalClicks.toLocaleString()}
                 {index === 2 && `${averageCtr.toFixed(1)}%`}
                 {index === 3 && `${links.length} / ${STARTER_LINK_LIMIT}`}
-                {index !== 1 && index !== 2 && index !== 3 && card.value}
               </p>
               <p className="mt-1 text-sm text-slate-500">{card.label}</p>
             </div>
@@ -135,7 +267,12 @@ export function DashboardClient() {
 
         <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_410px]">
           <div className="space-y-6">
-            <ProfileEditor profile={profile} setProfile={setProfile} />
+            <ProfileEditor
+              profile={profile}
+              saving={saving}
+              onSave={saveProfile}
+              onChange={setProfile}
+            />
             <div className="rounded-[2rem] border border-white bg-white p-5 shadow-xl">
               <div className="flex items-center justify-between gap-3">
                 <div>
@@ -231,24 +368,39 @@ export function DashboardClient() {
 
 function ProfileEditor({
   profile,
-  setProfile,
+  saving,
+  onSave,
+  onChange,
 }: {
   profile: ProfileState;
-  setProfile: (profile: ProfileState) => void;
+  saving: boolean;
+  onSave: (profile: ProfileState) => Promise<boolean>;
+  onChange: (profile: ProfileState) => void;
 }) {
   function updateProfile(key: keyof ProfileState, value: string) {
-    setProfile({ ...profile, [key]: value });
+    onChange({ ...profile, [key]: value });
   }
 
   return (
     <div className="rounded-[2rem] border border-white bg-white p-5 shadow-xl">
-      <h2 className="text-xl font-black text-slate-950">Create profile page</h2>
-      <p className="mt-1 text-sm text-slate-500">
-        Edit the public profile shown at /{profile.username || "username"}.
-      </p>
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <h2 className="text-xl font-black text-slate-950">Create profile page</h2>
+          <p className="mt-1 text-sm text-slate-500">
+            Edit the public profile shown at /{profile.username || "username"}.
+          </p>
+        </div>
+        <Button
+          disabled={saving}
+          onClick={() => onSave(profile)}
+          className="bg-slate-950 hover:bg-slate-800"
+        >
+          {saving ? "Saving..." : "Save profile"}
+        </Button>
+      </div>
       <div className="mt-5 grid gap-4 md:grid-cols-[120px_1fr_1fr]">
         <Image
-          src="https://images.unsplash.com/photo-1554151228-14d9def656e4?auto=format&fit=crop&w=240&q=80"
+          src={profile.image ?? DEFAULT_IMAGE}
           alt="Profile avatar"
           width={120}
           height={120}
@@ -267,7 +419,12 @@ function ProfileEditor({
           <Input
             id="profile-username"
             value={profile.username}
-            onChange={(event) => updateProfile("username", event.target.value.toLowerCase().replace(/\s+/g, ""))}
+            onChange={(event) =>
+              updateProfile(
+                "username",
+                event.target.value.toLowerCase().replace(/\s+/g, "")
+              )
+            }
           />
         </div>
         <div className="space-y-2 md:col-span-2 md:col-start-2">
@@ -298,7 +455,7 @@ function LivePreview({ links, profile }: { links: DashboardLink[]; profile: Prof
         <div className="rounded-[2rem] bg-slate-950 p-4 text-white">
           <div className="rounded-[1.5rem] bg-gradient-to-b from-indigo-950 via-slate-950 to-slate-900 p-5">
             <Image
-              src="https://images.unsplash.com/photo-1554151228-14d9def656e4?auto=format&fit=crop&w=240&q=80"
+              src={profile.image ?? DEFAULT_IMAGE}
               alt={profile.name}
               width={88}
               height={88}

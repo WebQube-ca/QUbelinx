@@ -13,7 +13,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <>
       {showChrome && <SiteHeader />}
-      <main id="main-content">{children}</main>
+      <main id="main-content" className="w-full max-w-[100vw] overflow-x-clip">
+        {children}
+      </main>
       {showChrome && <SiteFooter />}
     </>
   );
