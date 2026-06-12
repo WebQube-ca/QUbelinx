@@ -57,7 +57,13 @@ export function AuthCard({
           body: JSON.stringify({ name, email, password, username }),
         });
 
-        const registerData = (await registerResponse.json()) as { error?: string };
+        let registerData: { error?: string } = {};
+
+        try {
+          registerData = (await registerResponse.json()) as { error?: string };
+        } catch {
+          registerData = { error: "Server error during registration." };
+        }
 
         if (!registerResponse.ok) {
           setMessageTone("error");

@@ -1,7 +1,27 @@
+import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { hashPassword, isStrongEnoughPassword } from "@/lib/password";
-import { ensureUserProfile, slugifyUsername } from "@/lib/profile";
+import { ensureUserProfile } from "@/lib/profile";
 import { prisma } from "@/lib/prisma";
+
+export const runtime = "nodejs";
+
+function registerErrorMessage(error: unknown) {
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error.code === "P2022") {
+      return "Database schema is outdated. Run npm run forge:setup on the server.";
+    }
+    if (error.code === "P2002") {
+      return "An account with this email or username already exists.";
+    }
+  }
+
+  if (error instanceof Error && error.message.includes("passwordHash")) {
+    return "Database schema is outdated. Run npm run forge:setup on the server.";
+  }
+
+  return "Could not create account. Try again.";
+}
 
 export async function POST(request: Request) {
   try {
@@ -50,33 +70,17 @@ export async function POST(request: Request) {
       },
     });
 
-    const preferredUsername = usernameInput
-      ? slugifyUsername(usernameInput)
-      : slugifyUsername(email.split("@")[0] ?? "");
-
     await ensureUserProfile(user.id, {
       name,
       email,
+      username: usernameInput || email.split("@")[0],
     });
-
-    if (preferredUsername) {
-      const taken = await prisma.profile.findUnique({
-        where: { username: preferredUsername },
-      });
-
-      if (!taken) {
-        await prisma.profile.update({
-          where: { userId: user.id },
-          data: { username: preferredUsername, name },
-        });
-      }
-    }
 
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("[register]", error);
     return NextResponse.json(
-      { error: "Could not create account. Try again." },
+      { error: registerErrorMessage(error) },
       { status: 500 }
     );
   }

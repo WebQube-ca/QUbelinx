@@ -57,7 +57,10 @@ export function slugifyUsername(value: string) {
     .slice(0, 32);
 }
 
-export async function ensureUserProfile(userId: string, defaults?: { name?: string | null; email?: string | null }) {
+export async function ensureUserProfile(
+  userId: string,
+  defaults?: { name?: string | null; email?: string | null; username?: string | null }
+) {
   const existing = await prisma.profile.findUnique({
     where: { userId },
     include: { links: { orderBy: { sortOrder: "asc" } } },
@@ -65,15 +68,16 @@ export async function ensureUserProfile(userId: string, defaults?: { name?: stri
 
   if (existing) return existing;
 
-  const baseUsername =
+  const preferred =
+    slugifyUsername(defaults?.username ?? "") ||
     slugifyUsername(defaults?.email?.split("@")[0] ?? "") ||
     `creator-${userId.slice(0, 6)}`;
 
-  let username = baseUsername;
+  let username = preferred;
   let suffix = 1;
 
   while (await prisma.profile.findUnique({ where: { username } })) {
-    username = `${baseUsername}-${suffix}`;
+    username = `${preferred}-${suffix}`;
     suffix += 1;
   }
 

@@ -77,7 +77,9 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="mx-auto mt-12 flex max-w-7xl flex-col gap-3 border-t border-slate-200 pt-6 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-        <p>© {new Date().getFullYear()} {appName}. All rights reserved.</p>
+        <p suppressHydrationWarning>
+          © {new Date().getFullYear()} {appName}. All rights reserved.
+        </p>
         <p>Not just a link tool. A conversion engine for Instagram traffic.</p>
       </div>
     </footer>
